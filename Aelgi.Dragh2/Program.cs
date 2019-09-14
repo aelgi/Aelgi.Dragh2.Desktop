@@ -8,6 +8,8 @@ namespace Aelgi.Dragh2
         {
             var dragh = new Dragh();
             dragh.Startup();
+
+            dragh.Run();
         }
     }
 }
