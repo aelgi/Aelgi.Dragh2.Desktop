@@ -1,18 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Veldrid;
-using Veldrid.Sdl2;
-using Veldrid.StartupUtilities;
+using GLFWDotNet;
 
 namespace Aelgi.Dragh2
 {
     public class Dragh
     {
-        protected GraphicsDevice _graphicsDevice;
-        protected Sdl2Window _window;
-        protected readonly Dictionary<Type, BinaryAssetSerializer>
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
         {
@@ -21,38 +14,38 @@ namespace Aelgi.Dragh2
 
         protected void CreateResources()
         {
-            var factory = _graphicsDevice.ResourceFactory;
-        }
-
-        protected T LoadEmbeddedAsset<T>(string name)
-        {
-
         }
 
         public void Startup()
         {
             var services = new ServiceCollection();
 
-            var windowCI = new WindowCreateInfo()
+            if (GLFW.glfwInit() == 0)
             {
-                X = 100,
-                Y = 100,
-                WindowWidth = 960,
-                WindowHeight = 540,
-                WindowTitle = "Dragh2",
-            };
-            _window = VeldridStartup.CreateWindow(ref windowCI);
-            _graphicsDevice = VeldridStartup.CreateGraphicsDevice(_window);
+                throw new NotImplementedException();
+            }
+
+            GLFW.glfwWindowHint(GLFW.GLFW_CLIENT_API, GLFW.GLFW_OPENGL_API);
+            GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
+            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
+
+            var window = GLFW.glfwCreateWindow(640, 480, "Dragh 2.0", IntPtr.Zero, IntPtr.Zero);
+            if (window == IntPtr.Zero)
+            {
+                GLFW.glfwTerminate();
+                throw new NotImplementedException();
+            }
+
+            GLFW.glfwMakeContextCurrent(window);
+
+
 
             var provider = RegisterServices(services);
         }
 
         public void Run()
         {
-            while (_window.Exists)
-            {
-                _window.PumpEvents();
-            }
         }
     }
 }
