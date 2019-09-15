@@ -1,4 +1,7 @@
-﻿using GLFW;
+﻿using Aelgi.Dragh2.Core.Enums;
+using Aelgi.Dragh2.Core.IServices;
+using Aelgi.Dragh2.Services;
+using GLFW;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using SkiaSharp;
@@ -23,61 +26,61 @@ namespace Aelgi.Dragh2
 
     public class Dragh
     {
+        protected IServiceProvider _services;
+        protected KeyboardService _keyboard;
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
         {
-            return services.BuildServiceProvider();
-        }
+            _keyboard = new KeyboardService();
+            services.AddSingleton<IKeyboardService>(_keyboard);
+            services.AddSingleton<ITextService, TextService>();
 
-        protected void CreateResources()
-        {
-        }
-
-        private void LoadGlfw()
-        {
-            var asl = new AssemblyLoader();
-            var asm = asl.LoadFromAssemblyPath("glfw3.dll");
+            return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }
 
         public void Startup()
         {
             var services = new ServiceCollection();
 
-            var provider = RegisterServices(services);
+            var window = new NativeWindow(800, 600, "Dragh 2.0");
+            window.SizeChanged += SizeChanged;
+            window.KeyPress += KeyPress;
+            window.KeyRelease += KeyRelease;
+            window.MouseMoved += MouseMoved;
+
+            var nativeContext = GetNativeContext(window);
+            var glInterface = GRGlInterface.AssembleGlInterface(nativeContext, (contextHandle, name) => Glfw.GetProcAddress(name));
+            var context = GRContext.Create(GRBackend.OpenGL, glInterface);
+
+            var frameBufferInfo = new GRGlFramebufferInfo((uint)new UIntPtr(0), GRPixelConfig.Rgba8888.ToGlSizedFormat());
+            var surfaceSize = window.ClientSize;
+            var backendRenderTarget = new GRBackendRenderTarget(surfaceSize.Width, surfaceSize.Height, 0, 8, frameBufferInfo);
+            var surface = SKSurface.Create(context, backendRenderTarget, GRSurfaceOrigin.BottomLeft, SKImageInfo.PlatformColorType);
+            var canvas = surface.Canvas;
+
+            services.AddSingleton(window);
+            services.AddSingleton(canvas);
+
+            _services = RegisterServices(services);
         }
 
         public void Run()
         {
-            using (var window = new NativeWindow(800, 600, "Dragh 2.0"))
+            var window = _services.GetService<NativeWindow>();
+            var canvas = _services.GetService<SKCanvas>();
+
+            while (!window.IsClosing)
             {
-                window.SizeChanged += SizeChanged;
-                window.Refreshed += Refreshed;
-                window.KeyPress += KeyPress;
-                window.MouseMoved += MouseMoved;
-
-                var nativeContext = GetNativeContext(window);
-                var glInterface = GRGlInterface.AssembleGlInterface(nativeContext, (contextHandle, name) => Glfw.GetProcAddress(name));
-                using (var context = GRContext.Create(GRBackend.OpenGL, glInterface))
-                {
-                    var frameBufferInfo = new GRGlFramebufferInfo((uint)new UIntPtr(0), GRPixelConfig.Rgba8888.ToGlSizedFormat());
-                    var surfaceSize = window.ClientSize;
-                    var backendRenderTarget = new GRBackendRenderTarget(surfaceSize.Width, surfaceSize.Height, 0, 8, frameBufferInfo);
-                    using (var surface = SKSurface.Create(context, backendRenderTarget, GRSurfaceOrigin.BottomLeft, SKImageInfo.PlatformColorType))
-                    {
-                        var canvas = surface.Canvas;
-                        while (!window.IsClosing)
-                        {
-                            Render(window, canvas);
-                            Glfw.PollEvents();
-                        }
-                    }
-                }
-
+                Render();
+                Glfw.PollEvents();
             }
         }
 
-        public void Render(NativeWindow window, SKCanvas canvas)
+        public void Render()
         {
+            var window = _services.GetService<NativeWindow>();
+            var canvas = _services.GetService<SKCanvas>();
+
             canvas.Clear(SKColor.Parse("#F0F0F0"));
 
             var headerPaint = new SKPaint { Color = SKColor.Parse("#333333"), TextSize = 50, IsAntialias = true };
@@ -110,16 +113,40 @@ namespace Aelgi.Dragh2
         {
         }
 
+        private Key ConvertKeyInput(Keys key)
+        {
+            switch (key)
+            {
+                case Keys.A:
+                    return Key.LEFT;
+                case Keys.D:
+                    return Key.RIGHT;
+                case Keys.Escape:
+                    return Key.ESCAPE;
+                default: return Key.NONE;
+            }
+        }
+
         private void KeyPress(object sender, KeyEventArgs e)
         {
+            var key = ConvertKeyInput(e.Key);
+            if (key != Key.NONE) _keyboard.SetKey(key, true);
+        }
+
+        private void KeyRelease(object sender, KeyEventArgs e)
+        {
+            var key = ConvertKeyInput(e.Key);
+            if (key != Key.NONE) _keyboard.SetKey(key, false);
         }
 
         private void Refreshed(object sender, EventArgs e)
         {
+            // Again I dont think I need to do anything for this
         }
 
         private void SizeChanged(object sender, SizeChangeEventArgs e)
         {
+            // We dont need to do anything at the moment because the main render loop re-renders
         }
     }
 }

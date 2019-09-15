@@ -19,4 +19,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Aelgi.Dragh2.Core\Aelgi.Dragh2.Core.csproj" />
+  </ItemGroup>
+
 </Project>
