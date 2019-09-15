@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="glfw-net" Version="3.3.1" />
     <PackageReference Include="GLFWDotNet" Version="19.8.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
