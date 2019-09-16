@@ -1,4 +1,5 @@
 ﻿using Aelgi.Dragh2.Core.Enums;
+using Aelgi.Dragh2.Core.HUD;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Services;
 using GLFW;
@@ -31,9 +32,11 @@ namespace Aelgi.Dragh2
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
         {
+            services.AddSingleton<IUtilityService, UtilityService>();
             _keyboard = new KeyboardService();
             services.AddSingleton<IKeyboardService>(_keyboard);
             services.AddSingleton<ITextService, TextService>();
+            services.AddTransient<DebugKeys>();
 
             return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }
@@ -81,17 +84,15 @@ namespace Aelgi.Dragh2
             var window = _services.GetService<NativeWindow>();
             var canvas = _services.GetService<SKCanvas>();
 
-            canvas.Clear(SKColor.Parse("#F0F0F0"));
+            var keyboard = _services.GetService<IKeyboardService>();
+            if (keyboard.IsPressed(Key.ESCAPE)) window.Close();
 
-            var headerPaint = new SKPaint { Color = SKColor.Parse("#333333"), TextSize = 50, IsAntialias = true };
-            canvas.DrawText("Hello from GLFW.NET + SkiaSharp!", 10, 60, headerPaint);
+            var utility = _services.GetService<IUtilityService>();
+            canvas.Clear(utility.ColorToSkia(Colors.Blue));
 
-            var inputInfoPaint = new SKPaint { Color = SKColor.Parse("#F34336"), TextSize = 18, IsAntialias = true };
-            canvas.DrawText($"Last key pressed", 10, 90, inputInfoPaint);
-            canvas.DrawText($"Last mouse position", 10, 120, inputInfoPaint);
+            var debugKeys = _services.GetService<DebugKeys>();
 
-            var exitInfoPaint = new SKPaint { Color = SKColor.Parse("#3F51B5"), TextSize = 18, IsAntialias = true };
-            canvas.DrawText("Press Enter to Exist", 10, 160, exitInfoPaint);
+            debugKeys.Render();
 
             canvas.Flush();
             window.SwapBuffers();
@@ -123,6 +124,9 @@ namespace Aelgi.Dragh2
                     return Key.RIGHT;
                 case Keys.Escape:
                     return Key.ESCAPE;
+                case Keys.W:
+                case Keys.Space:
+                    return Key.UP;
                 default: return Key.NONE;
             }
         }
