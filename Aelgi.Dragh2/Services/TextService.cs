@@ -18,7 +18,7 @@ namespace Aelgi.Dragh2.Services
             UtilityService = utilityService;
         }
 
-        public void DrawToScreen(uint x, uint y, uint size, Colors color, string text)
+        public void DrawToScreen(uint x, uint y, uint size, Colors color, string text, bool rightAlign = false)
         {
             var convertedColor = UtilityService.ColorToSkia(color);
             var paint = new SKPaint
@@ -26,13 +26,14 @@ namespace Aelgi.Dragh2.Services
                 Color = convertedColor,
                 TextSize = size,
                 IsAntialias = true,
+                TextAlign = rightAlign ? SKTextAlign.Right : SKTextAlign.Left,
             };
             Canvas.DrawText(text, x, y, paint);
         }
 
-        public void DrawToScreen(uint x, uint y, uint size, string text)
+        public void DrawToScreen(uint x, uint y, uint size, string text, bool rightAlign = false)
         {
-            DrawToScreen(x, y, size, Colors.Black, text);
+            DrawToScreen(x, y, size, Colors.Black, text, rightAlign);
         }
     }
 }

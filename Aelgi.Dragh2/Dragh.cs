@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using SkiaSharp;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -30,6 +31,7 @@ namespace Aelgi.Dragh2
         protected IServiceProvider _services;
         protected KeyboardService _keyboard;
         protected bool _close = false;
+        protected Stopwatch _framesTimer = new Stopwatch();
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
         {
@@ -86,7 +88,13 @@ namespace Aelgi.Dragh2
 
         public void Update()
         {
+            _framesTimer.Stop();
+            var ts = _framesTimer.ElapsedMilliseconds;
+            _framesTimer.Restart();
+            var fps = 1000 * ts / 60;
+
             var gameService = _services.GetService<IGameUpdateService>();
+            gameService.SetFPS((int)fps);
 
             var keyboard = _services.GetService<IKeyboardService>();
             if (keyboard.IsPressed(Key.ESCAPE)) _close = true;

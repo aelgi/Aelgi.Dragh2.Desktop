@@ -8,5 +8,8 @@ namespace Aelgi.Dragh2.Core.IServices
     public interface IGameUpdateService
     {
         bool IsPressed(Key key);
+
+        int GetFPS();
+        void SetFPS(int fps);
     }
 }

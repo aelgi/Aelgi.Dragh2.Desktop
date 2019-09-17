@@ -8,9 +8,10 @@ namespace Aelgi.Dragh2.Core.HUD
 {
     public class HUDController : Drawable
     {
-        public new ICollection<Drawable> Children = new List<Drawable>()
+        public HUDController() : base()
         {
-            new DebugKeys()
-        };
+            Children.Add(new DebugKeys());
+            Children.Add(new FPSCounter());
+        }
     }
 }

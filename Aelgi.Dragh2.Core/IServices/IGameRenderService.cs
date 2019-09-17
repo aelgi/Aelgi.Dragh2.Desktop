@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Aelgi.Dragh2.Core.IServices
 {
-    public interface IGameRenderService : ITextService
+    public interface IGameRenderService
     {
+        ITextService Text { get; }
+
+        int GetWindowWidth();
+        int GetWindowHeight();
     }
 }

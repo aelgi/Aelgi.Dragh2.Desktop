@@ -8,21 +8,21 @@ namespace Aelgi.Dragh2.Services
 {
     public class GameRenderService : IGameRenderService
     {
-        public ITextService TextService { get; set; }
+        public ITextService Text { get; set; }
 
         public GameRenderService(ITextService textService)
         {
-            TextService = textService;
+            Text = textService;
         }
 
-        public void DrawToScreen(uint x, uint y, uint size, Colors color, string text)
+        public int GetWindowWidth()
         {
-            TextService.DrawToScreen(x, y, size, color, text);
+            return 800;
         }
 
-        public void DrawToScreen(uint x, uint y, uint size, string text)
+        public int GetWindowHeight()
         {
-            TextService.DrawToScreen(x, y, size, text);
+            return 600;
         }
     }
 }

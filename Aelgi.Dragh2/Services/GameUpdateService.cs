@@ -9,6 +9,7 @@ namespace Aelgi.Dragh2.Services
     public class GameUpdateService : IGameUpdateService
     {
         public IKeyboardService KeyboardService { get; set; }
+        public int _fps = 0;
 
         public GameUpdateService(IKeyboardService keyboardService)
         {
@@ -18,6 +19,16 @@ namespace Aelgi.Dragh2.Services
         public bool IsPressed(Key key)
         {
             return KeyboardService.IsPressed(key);
+        }
+
+        public int GetFPS()
+        {
+            return _fps;
+        }
+
+        public void SetFPS(int fps)
+        {
+            _fps = fps;
         }
     }
 }

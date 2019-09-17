@@ -27,11 +27,11 @@ namespace Aelgi.Dragh2.Core.HUD
         public override void Render(IGameRenderService gameService)
         {
             uint lineHeight = 18;
-            gameService.DrawToScreen(0, lineHeight, lineHeight, "The current keyboard readout:");
-            gameService.DrawToScreen(0, lineHeight * 2, lineHeight, $"Escape Key: {_escape}");
-            gameService.DrawToScreen(0, lineHeight * 3, lineHeight, $"Left Key: {_left}");
-            gameService.DrawToScreen(0, lineHeight * 4, lineHeight, $"Right Key: {_right}");
-            gameService.DrawToScreen(0, lineHeight * 5, lineHeight, $"Up Key: {_up}");
+            gameService.Text.DrawToScreen(0, lineHeight, lineHeight, "The current keyboard readout:");
+            gameService.Text.DrawToScreen(0, lineHeight * 2, lineHeight, $"Escape Key: {_escape}");
+            gameService.Text.DrawToScreen(0, lineHeight * 3, lineHeight, $"Left Key: {_left}");
+            gameService.Text.DrawToScreen(0, lineHeight * 4, lineHeight, $"Right Key: {_right}");
+            gameService.Text.DrawToScreen(0, lineHeight * 5, lineHeight, $"Up Key: {_up}");
 
             base.Render(gameService);
         }
