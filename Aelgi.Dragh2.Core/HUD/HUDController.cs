@@ -1,24 +1,16 @@
-﻿using System;
+﻿using Aelgi.Dragh2.Core.IServices;
+using Aelgi.Dragh2.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Aelgi.Dragh2.Core.HUD
 {
-    public class HUDController
+    public class HUDController : Drawable
     {
-        protected List<IRenderable> _items = new List<IRenderable>();
-
-        public void RegisterItem(IRenderable item)
+        public new ICollection<Drawable> Children = new List<Drawable>()
         {
-            _items.Add(item);
-        }
-
-        public void Draw()
-        {
-            foreach (var x in _items)
-            {
-                x.Render();
-            }
-        }
+            new DebugKeys()
+        };
     }
 }

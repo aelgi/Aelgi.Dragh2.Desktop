@@ -29,6 +29,7 @@ namespace Aelgi.Dragh2
     {
         protected IServiceProvider _services;
         protected KeyboardService _keyboard;
+        protected bool _close = false;
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
         {
@@ -36,7 +37,10 @@ namespace Aelgi.Dragh2
             _keyboard = new KeyboardService();
             services.AddSingleton<IKeyboardService>(_keyboard);
             services.AddSingleton<ITextService, TextService>();
-            services.AddTransient<DebugKeys>();
+            services.AddSingleton<IGameRenderService, GameRenderService>();
+            services.AddSingleton<IGameUpdateService, GameUpdateService>();
+
+            services.AddSingleton<HUDController>();
 
             return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }
@@ -74,25 +78,40 @@ namespace Aelgi.Dragh2
 
             while (!window.IsClosing)
             {
+                Update();
                 Render();
                 Glfw.PollEvents();
             }
+        }
+
+        public void Update()
+        {
+            var gameService = _services.GetService<IGameUpdateService>();
+
+            var keyboard = _services.GetService<IKeyboardService>();
+            if (keyboard.IsPressed(Key.ESCAPE)) _close = true;
+
+            var hud = _services.GetService<HUDController>();
+            hud.Update(gameService);
         }
 
         public void Render()
         {
             var window = _services.GetService<NativeWindow>();
             var canvas = _services.GetService<SKCanvas>();
+            if (_close)
+            {
+                window.Close();
+                return;
+            }
 
-            var keyboard = _services.GetService<IKeyboardService>();
-            if (keyboard.IsPressed(Key.ESCAPE)) window.Close();
+            var gameService = _services.GetService<IGameRenderService>();
 
             var utility = _services.GetService<IUtilityService>();
             canvas.Clear(utility.ColorToSkia(Colors.Blue));
 
-            var debugKeys = _services.GetService<DebugKeys>();
-
-            debugKeys.Render();
+            var hud = _services.GetService<HUDController>();
+            hud.Render(gameService);
 
             canvas.Flush();
             window.SwapBuffers();

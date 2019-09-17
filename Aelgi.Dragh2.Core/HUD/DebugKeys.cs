@@ -1,30 +1,39 @@
 ﻿using Aelgi.Dragh2.Core.Enums;
 using Aelgi.Dragh2.Core.IServices;
+using Aelgi.Dragh2.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Aelgi.Dragh2.Core.HUD
 {
-    public class DebugKeys : IRenderable
+    public class DebugKeys : Drawable
     {
-        public ITextService TextService { get; }
-        public IKeyboardService KeyboardService { get; }
+        protected bool _escape = false;
+        protected bool _left = false;
+        protected bool _right = false;
+        protected bool _up = false;
 
-        public DebugKeys(ITextService textService, IKeyboardService keyboardService)
+        public override void Update(IGameUpdateService gameService)
         {
-            TextService = textService;
-            KeyboardService = keyboardService;
+            _escape = gameService.IsPressed(Key.ESCAPE);
+            _left = gameService.IsPressed(Key.LEFT);
+            _right = gameService.IsPressed(Key.RIGHT);
+            _up = gameService.IsPressed(Key.UP);
+
+            base.Update(gameService);
         }
 
-        public void Render()
+        public override void Render(IGameRenderService gameService)
         {
             uint lineHeight = 18;
-            TextService.DrawToScreen(0, lineHeight, lineHeight, "The current keyboard readout:");
-            TextService.DrawToScreen(0, lineHeight * 2, lineHeight, $"Escape Key: {KeyboardService.IsPressed(Key.ESCAPE)}");
-            TextService.DrawToScreen(0, lineHeight * 3, lineHeight, $"Left Key: {KeyboardService.IsPressed(Key.LEFT)}");
-            TextService.DrawToScreen(0, lineHeight * 4, lineHeight, $"Right Key: {KeyboardService.IsPressed(Key.RIGHT)}");
-            TextService.DrawToScreen(0, lineHeight * 5, lineHeight, $"Up Key: {KeyboardService.IsPressed(Key.UP)}");
+            gameService.DrawToScreen(0, lineHeight, lineHeight, "The current keyboard readout:");
+            gameService.DrawToScreen(0, lineHeight * 2, lineHeight, $"Escape Key: {_escape}");
+            gameService.DrawToScreen(0, lineHeight * 3, lineHeight, $"Left Key: {_left}");
+            gameService.DrawToScreen(0, lineHeight * 4, lineHeight, $"Right Key: {_right}");
+            gameService.DrawToScreen(0, lineHeight * 5, lineHeight, $"Up Key: {_up}");
+
+            base.Render(gameService);
         }
     }
 }
