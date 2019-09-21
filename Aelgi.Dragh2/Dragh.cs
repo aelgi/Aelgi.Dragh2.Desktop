@@ -97,6 +97,9 @@ namespace Aelgi.Dragh2
             var keyboard = _services.GetService<IKeyboardService>();
             if (keyboard.IsPressed(Key.ESCAPE)) _close = true;
 
+            var world = _services.GetService<IWorldController>();
+            world.Update(gameService);
+
             var hud = _services.GetService<HUDController>();
             hud.Update(gameService);
         }
@@ -107,6 +110,9 @@ namespace Aelgi.Dragh2
             canvas.Clear(utility.ColorToSkia(Colors.Background));
 
             var gameService = new GameRenderService(canvas, utility);
+
+            var world = _services.GetService<IWorldController>();
+            world.Render(gameService);
 
             var hud = _services.GetService<HUDController>();
             hud.Render(gameService);

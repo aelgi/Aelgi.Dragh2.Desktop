@@ -8,6 +8,8 @@ namespace Aelgi.Dragh2.Core.IServices
     {
         ITextService Text { get; }
 
+        void DrawImage(int x, int y, string imageName);
+
         int GetWindowWidth();
         int GetWindowHeight();
     }
