@@ -1,6 +1,7 @@
 ﻿using Aelgi.Dragh2.Core.Enums;
 using Aelgi.Dragh2.Core.HUD;
 using Aelgi.Dragh2.Core.IServices;
+using Aelgi.Dragh2.Core.World;
 using Aelgi.Dragh2.Services;
 using GLFW;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,7 @@ namespace Aelgi.Dragh2
             services.AddSingleton<IGameUpdateService, GameUpdateService>();
 
             services.AddSingleton<HUDController>();
+            services.AddSingleton<IWorldController, WorldController>();
 
             return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }
@@ -54,6 +56,8 @@ namespace Aelgi.Dragh2
             var services = new ServiceCollection();
 
             _services = RegisterServices(services);
+
+            _services.GetService<IWorldController>().LoadChunks();
         }
 
         public void Run()
