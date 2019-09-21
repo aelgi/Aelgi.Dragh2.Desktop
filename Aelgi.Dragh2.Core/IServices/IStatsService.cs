@@ -1,14 +1,12 @@
-﻿using Aelgi.Dragh2.Core.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Aelgi.Dragh2.Core.IServices
 {
-    public interface IGameUpdateService
+    public interface IStatsService
     {
-        bool IsPressed(Key key);
-
+        void SetFPS(int fps);
         int GetFPS();
     }
 }

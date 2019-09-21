@@ -8,8 +8,10 @@ using Microsoft.Extensions.DependencyModel;
 using SkiaSharp;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
@@ -35,11 +37,11 @@ namespace Aelgi.Dragh2
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
         {
-            services.AddSingleton<IUtilityService, UtilityService>();
+            var utilityService = new UtilityService();
+            services.AddSingleton<IUtilityService>(utilityService);
+            services.AddSingleton<IStatsService, StatsService>();
             _keyboard = new KeyboardService();
             services.AddSingleton<IKeyboardService>(_keyboard);
-            services.AddSingleton<ITextService, TextService>();
-            services.AddSingleton<IGameRenderService, GameRenderService>();
             services.AddSingleton<IGameUpdateService, GameUpdateService>();
 
             services.AddSingleton<HUDController>();
@@ -51,50 +53,42 @@ namespace Aelgi.Dragh2
         {
             var services = new ServiceCollection();
 
-            var window = new NativeWindow(800, 600, "Dragh 2.0");
-            window.SizeChanged += SizeChanged;
-            window.KeyPress += KeyPress;
-            window.KeyRelease += KeyRelease;
-            window.MouseMoved += MouseMoved;
-
-            var nativeContext = GetNativeContext(window);
-            var glInterface = GRGlInterface.AssembleGlInterface(nativeContext, (contextHandle, name) => Glfw.GetProcAddress(name));
-            var context = GRContext.Create(GRBackend.OpenGL, glInterface);
-
-            var frameBufferInfo = new GRGlFramebufferInfo((uint)new UIntPtr(0), GRPixelConfig.Rgba8888.ToGlSizedFormat());
-            var surfaceSize = window.ClientSize;
-            var backendRenderTarget = new GRBackendRenderTarget(surfaceSize.Width, surfaceSize.Height, 0, 8, frameBufferInfo);
-            var surface = SKSurface.Create(context, backendRenderTarget, GRSurfaceOrigin.BottomLeft, SKImageInfo.PlatformColorType);
-            var canvas = surface.Canvas;
-
-            services.AddSingleton(window);
-            services.AddSingleton(canvas);
-
             _services = RegisterServices(services);
         }
 
         public void Run()
         {
-            var window = _services.GetService<NativeWindow>();
-            var canvas = _services.GetService<SKCanvas>();
-
-            while (!window.IsClosing)
+            using (var window = new NativeWindow(800, 600, "Dragh 2.0"))
             {
-                Update();
-                Render();
-                Glfw.PollEvents();
+                window.SizeChanged += SizeChanged;
+                window.MouseMoved += MouseMoved;
+                window.KeyAction += KeyAction;
+
+                using (var context = GenerateSkiaContext(window))
+                using (var skiaSurface = GenerateSkiaSurface(context, window.ClientSize))
+                {
+                    var canvas = skiaSurface.Canvas;
+
+                    while (!window.IsClosing)
+                    {
+                        Update();
+                        Render(window, canvas);
+                        Glfw.PollEvents();
+                    }
+                }
             }
         }
 
-        public void Update()
+        protected void Update()
         {
             _framesTimer.Stop();
             var ts = _framesTimer.ElapsedMilliseconds;
             _framesTimer.Restart();
             var fps = 1000 * ts / 60;
 
+            var statsService = _services.GetService<IStatsService>();
+            statsService.SetFPS((int)fps);
             var gameService = _services.GetService<IGameUpdateService>();
-            gameService.SetFPS((int)fps);
 
             var keyboard = _services.GetService<IKeyboardService>();
             if (keyboard.IsPressed(Key.ESCAPE)) _close = true;
@@ -103,26 +97,32 @@ namespace Aelgi.Dragh2
             hud.Update(gameService);
         }
 
-        public void Render()
+        protected void Render(NativeWindow window, SKCanvas canvas)
         {
-            var window = _services.GetService<NativeWindow>();
-            var canvas = _services.GetService<SKCanvas>();
-            if (_close)
-            {
-                window.Close();
-                return;
-            }
-
-            var gameService = _services.GetService<IGameRenderService>();
-
             var utility = _services.GetService<IUtilityService>();
-            canvas.Clear(utility.ColorToSkia(Colors.Blue));
+            canvas.Clear(utility.ColorToSkia(Colors.Background));
+
+            var gameService = new GameRenderService(canvas, utility);
 
             var hud = _services.GetService<HUDController>();
             hud.Render(gameService);
 
             canvas.Flush();
             window.SwapBuffers();
+        }
+
+        private static SKSurface GenerateSkiaSurface(GRContext skiaContext, Size surfaceSize)
+        {
+            var frameBufferInfo = new GRGlFramebufferInfo((uint)new UIntPtr(0), GRPixelConfig.Rgba8888.ToGlSizedFormat());
+            var backendRenderTarget = new GRBackendRenderTarget(surfaceSize.Width, surfaceSize.Height, 0, 8, frameBufferInfo);
+            return SKSurface.Create(skiaContext, backendRenderTarget, GRSurfaceOrigin.BottomLeft, SKImageInfo.PlatformColorType);
+        }
+
+        private static GRContext GenerateSkiaContext(NativeWindow window)
+        {
+            var nativeContext = GetNativeContext(window);
+            var glInterface = GRGlInterface.AssembleGlInterface(nativeContext, (contextHandle, name) => Glfw.GetProcAddress(name));
+            return GRContext.Create(GRBackend.OpenGL, glInterface);
         }
 
         private static object GetNativeContext(NativeWindow nativeWindow)
@@ -158,21 +158,21 @@ namespace Aelgi.Dragh2
             }
         }
 
-        private void KeyPress(object sender, KeyEventArgs e)
+        private void KeyAction(object sender, KeyEventArgs e)
         {
             var key = ConvertKeyInput(e.Key);
-            if (key != Key.NONE) _keyboard.SetKey(key, true);
-        }
+            if (key == Key.NONE) return;
 
-        private void KeyRelease(object sender, KeyEventArgs e)
-        {
-            var key = ConvertKeyInput(e.Key);
-            if (key != Key.NONE) _keyboard.SetKey(key, false);
-        }
-
-        private void Refreshed(object sender, EventArgs e)
-        {
-            // Again I dont think I need to do anything for this
+            switch(e.State)
+            {
+                case InputState.Press:
+                case InputState.Repeat:
+                    _keyboard.SetKey(key, true);
+                    break;
+                case InputState.Release:
+                    _keyboard.SetKey(key, false);
+                    break;
+            }
         }
 
         private void SizeChanged(object sender, SizeChangeEventArgs e)

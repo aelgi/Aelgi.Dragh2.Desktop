@@ -9,12 +9,12 @@ namespace Aelgi.Dragh2.Services
 {
     public class TextService : ITextService
     {
-        public SKCanvas Canvas { get; }
         public IUtilityService UtilityService { get; }
+        protected SKCanvas _canvas;
 
         public TextService(SKCanvas canvas, IUtilityService utilityService)
         {
-            Canvas = canvas;
+            _canvas = canvas;
             UtilityService = utilityService;
         }
 
@@ -28,7 +28,7 @@ namespace Aelgi.Dragh2.Services
                 IsAntialias = true,
                 TextAlign = rightAlign ? SKTextAlign.Right : SKTextAlign.Left,
             };
-            Canvas.DrawText(text, x, y, paint);
+            _canvas.DrawText(text, x, y, paint);
         }
 
         public void DrawToScreen(uint x, uint y, uint size, string text, bool rightAlign = false)

@@ -17,8 +17,8 @@ namespace Aelgi.Dragh2.Services
         {
             switch (color)
             {
-                case Colors.Primary: return new SKColor(126, 192, 238);
-                case Colors.Background: return new SKColor(221, 221, 221);
+                case Colors.Background: return new SKColor(126, 192, 238);
+                case Colors.Primary: return new SKColor(41, 166, 52);
                 case Colors.Black: return new SKColor(0, 0, 0);
                 case Colors.White: return new SKColor(255, 255, 255);
                 case Colors.Red: return new SKColor(197, 7, 7);

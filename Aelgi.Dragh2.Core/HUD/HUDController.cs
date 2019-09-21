@@ -1,17 +1,26 @@
-﻿using Aelgi.Dragh2.Core.IServices;
-using Aelgi.Dragh2.Core.Models;
+﻿using Aelgi.Dragh2.Core.IModels;
+using Aelgi.Dragh2.Core.IServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Aelgi.Dragh2.Core.HUD
 {
-    public class HUDController : Drawable
+    public class HUDController : IDrawable
     {
-        public HUDController() : base()
+        protected FPSCounter _counter = new FPSCounter();
+        protected DebugKeys _debugKeys = new DebugKeys();
+
+        public void Update(IGameUpdateService gameService)
         {
-            Children.Add(new DebugKeys());
-            Children.Add(new FPSCounter());
+            _counter.Update(gameService);
+            _debugKeys.Update(gameService);
+        }
+
+        public void Render(IGameRenderService gameService)
+        {
+            _counter.Render(gameService);
+            _debugKeys.Render(gameService);
         }
     }
 }
