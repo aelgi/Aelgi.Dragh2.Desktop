@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aelgi.Dragh2.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace Aelgi.Dragh2.Core.IServices
     {
         ITextService Text { get; }
 
-        void DrawImage(int x, int y, string imageName);
+        void DrawImage(Position pos, string imageName);
 
         int GetWindowWidth();
         int GetWindowHeight();

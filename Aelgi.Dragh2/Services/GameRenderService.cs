@@ -1,5 +1,6 @@
 ﻿using Aelgi.Dragh2.Core.Enums;
 using Aelgi.Dragh2.Core.IServices;
+using Aelgi.Dragh2.Core.Models;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -46,10 +47,10 @@ namespace Aelgi.Dragh2.Services
             }
         }
 
-        public void DrawImage(int x, int y, string imageName)
+        public void DrawImage(Position pos, string imageName)
         {
             var bitmap = LoadFromCache(imageName);
-            _canvas.DrawBitmap(bitmap, x, y);
+            _canvas.DrawBitmap(bitmap, pos.X, pos.Y);
         }
     }
 }

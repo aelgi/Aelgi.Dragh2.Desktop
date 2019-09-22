@@ -2,6 +2,7 @@
 using Aelgi.Dragh2.Core.HUD;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.World;
+using Aelgi.Dragh2.Core.World.Generators;
 using Aelgi.Dragh2.Services;
 using GLFW;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +47,7 @@ namespace Aelgi.Dragh2
             services.AddSingleton<IGameUpdateService, GameUpdateService>();
 
             services.AddSingleton<HUDController>();
-            services.AddSingleton<IWorldController, WorldController>();
+            services.AddSingleton<IWorldController>(new WorldController(new WorldGenerator()));
 
             return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }
@@ -58,6 +59,9 @@ namespace Aelgi.Dragh2
             _services = RegisterServices(services);
 
             _services.GetService<IWorldController>().LoadChunks();
+
+            var gameUpdate = _services.GetService<IGameUpdateService>();
+            gameUpdate.GamePosition = new Core.Models.Position(400, 300);
         }
 
         public void Run()
@@ -75,7 +79,7 @@ namespace Aelgi.Dragh2
 
                     while (!window.IsClosing)
                     {
-                        Update();
+                        Update(window);
                         Render(window, canvas);
                         Glfw.PollEvents();
                     }
@@ -83,7 +87,7 @@ namespace Aelgi.Dragh2
             }
         }
 
-        protected void Update()
+        protected void Update(NativeWindow window)
         {
             _framesTimer.Stop();
             var ts = _framesTimer.ElapsedMilliseconds;
@@ -91,8 +95,9 @@ namespace Aelgi.Dragh2
             var fps = 1000 * ts / 60;
 
             var statsService = _services.GetService<IStatsService>();
-            statsService.SetFPS((int)fps);
+            statsService.SetFPS((int)ts);
             var gameService = _services.GetService<IGameUpdateService>();
+            gameService.WindowSize = new Core.Models.Position(800, 600);
 
             var keyboard = _services.GetService<IKeyboardService>();
             if (keyboard.IsPressed(Key.ESCAPE)) _close = true;
