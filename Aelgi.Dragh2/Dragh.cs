@@ -77,49 +77,48 @@ namespace Aelgi.Dragh2
                 {
                     var canvas = skiaSurface.Canvas;
 
+                    var utility = _services.GetRequiredService<IUtilityService>();
+                    var statsService = _services.GetRequiredService<IStatsService>();
+                    var gameUpdateService = _services.GetRequiredService<IGameUpdateService>();
+                    var keyboard = _services.GetRequiredService<IKeyboardService>();
+                    var world = _services.GetRequiredService<IWorldController>();
+                    var hud = _services.GetRequiredService<HUDController>();
+
                     while (!window.IsClosing)
                     {
-                        Update(window);
-                        Render(window, canvas);
+                        Update(window, statsService, gameUpdateService, keyboard, world, hud);
+                        Render(window, canvas, utility, world, hud);
                         Glfw.PollEvents();
                     }
                 }
             }
         }
 
-        protected void Update(NativeWindow window)
+        protected void Update(NativeWindow window, IStatsService statsService, IGameUpdateService gameService, IKeyboardService keyboard, IWorldController world, HUDController hud)
         {
             _framesTimer.Stop();
             var ts = _framesTimer.ElapsedMilliseconds;
             _framesTimer.Restart();
             var fps = 1000 * ts / 60;
 
-            var statsService = _services.GetService<IStatsService>();
-            statsService.SetFPS((int)ts);
-            var gameService = _services.GetService<IGameUpdateService>();
+            statsService.SetFPS((int)fps);
             gameService.WindowSize = new Core.Models.Position(800, 600);
 
-            var keyboard = _services.GetService<IKeyboardService>();
-            if (keyboard.IsPressed(Key.ESCAPE)) _close = true;
+            _close |= keyboard.IsPressed(Key.ESCAPE);
 
-            var world = _services.GetService<IWorldController>();
             world.Update(gameService);
 
-            var hud = _services.GetService<HUDController>();
             hud.Update(gameService);
         }
 
-        protected void Render(NativeWindow window, SKCanvas canvas)
+        protected void Render(NativeWindow window, SKCanvas canvas, IUtilityService utility, IWorldController world, HUDController hud)
         {
-            var utility = _services.GetService<IUtilityService>();
             canvas.Clear(utility.ColorToSkia(Colors.Background));
 
             var gameService = new GameRenderService(canvas, utility);
 
-            var world = _services.GetService<IWorldController>();
             world.Render(gameService);
 
-            var hud = _services.GetService<HUDController>();
             hud.Render(gameService);
 
             canvas.Flush();
