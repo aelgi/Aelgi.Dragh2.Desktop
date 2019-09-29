@@ -11,6 +11,7 @@ namespace Aelgi.Dragh2.Core.Enums
         LEFT,
         RIGHT,
         UP,
+        DOWN,
         ESCAPE
     }
 }

@@ -9,7 +9,7 @@ namespace Aelgi.Dragh2.Core.HUD
     public class HUDController : IDrawable
     {
         protected FPSCounter _counter = new FPSCounter();
-        protected DebugKeys _debugKeys = new DebugKeys();
+        protected Debug _debugKeys = new Debug();
 
         public void Update(IGameUpdateService gameService)
         {

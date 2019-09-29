@@ -4,8 +4,6 @@ namespace Aelgi.Dragh2.Core.World.Blocks
 {
     public class TopDirt : Block
     {
-        public override void Update(IGameUpdateService gameService) { }
-
         public override void Render(IGameRenderService gameService)
         {
             DrawImage(gameService, "TopDirt");
