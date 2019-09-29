@@ -1,10 +1,8 @@
 ﻿using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
 using Aelgi.Dragh2.Core.World.Generators;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Aelgi.Dragh2.Core.World
 {
@@ -27,15 +25,15 @@ namespace Aelgi.Dragh2.Core.World
         {
             var positions = new List<Position>();
 
-            var topLeft = gamePosition - (windowSize / 2);
-            var topLeftX = topLeft.X % Chunk.ChunkWidth;
-            var topLeftY = topLeft.Y % Chunk.ChunkHeight;
-            var bottomRight = gamePosition + (windowSize / 2);
-            var maxX = bottomRight.X;
-            var maxY = bottomRight.Y;
-
             var width = Chunk.ChunkWidth * Block.BlockSize;
             var height = Chunk.ChunkHeight * Block.BlockSize;
+
+            var topLeft = gamePosition - (windowSize / 2) - new Position(width, height);
+            var topLeftX = topLeft.X % Chunk.ChunkWidth;
+            var topLeftY = topLeft.Y % Chunk.ChunkHeight;
+            var bottomRight = gamePosition + (windowSize / 2) + new Position(width, height);
+            var maxX = bottomRight.X;
+            var maxY = bottomRight.Y;
 
 
             for (var i = topLeftX; i <= maxX; i += width)

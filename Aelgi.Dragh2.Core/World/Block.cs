@@ -1,9 +1,6 @@
 ﻿using Aelgi.Dragh2.Core.IModels;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Aelgi.Dragh2.Core.World
 {
@@ -16,7 +13,7 @@ namespace Aelgi.Dragh2.Core.World
 
         public void DrawImage(IGameRenderService gameService, string imageName)
         {
-            var pos = WorldPosition - (Position * BlockSize);
+            var pos = WorldPosition + (Position * BlockSize);
             gameService.DrawImage(pos, imageName);
         }
 

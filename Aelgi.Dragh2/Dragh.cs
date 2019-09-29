@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
@@ -61,7 +60,8 @@ namespace Aelgi.Dragh2
             _services.GetService<IWorldController>().LoadChunks();
 
             var gameUpdate = _services.GetService<IGameUpdateService>();
-            gameUpdate.GamePosition = new Core.Models.Position(400, 300);
+            //gameUpdate.GamePosition = new Core.Models.Position(400, 1024);
+            gameUpdate.GamePosition = new Core.Models.Position(400, 1088);
         }
 
         public void Run()
@@ -178,7 +178,7 @@ namespace Aelgi.Dragh2
             var key = ConvertKeyInput(e.Key);
             if (key == Key.NONE) return;
 
-            switch(e.State)
+            switch (e.State)
             {
                 case InputState.Press:
                 case InputState.Repeat:

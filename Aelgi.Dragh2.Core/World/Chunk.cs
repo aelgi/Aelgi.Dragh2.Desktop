@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Aelgi.Dragh2.Core.IModels;
+﻿using Aelgi.Dragh2.Core.IModels;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
-using Aelgi.Dragh2.Core.World.Blocks;
+using System;
+using System.Collections.Generic;
 
 namespace Aelgi.Dragh2.Core.World
 {
     public class Chunk : IDrawable
     {
-        private static int ChunkSize => 5;
+        private static int ChunkSize => 64;
         public static int ChunkWidth => ChunkSize;
         public static int ChunkHeight => ChunkSize;
         public static int AverageHeight => 32;
