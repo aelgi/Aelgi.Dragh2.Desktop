@@ -1,8 +1,6 @@
 ﻿using Aelgi.Dragh2.Core.IModels;
 using Aelgi.Dragh2.Core.IServices;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Aelgi.Dragh2.Core.Models;
 
 namespace Aelgi.Dragh2.Core.HUD
 {
@@ -10,15 +8,18 @@ namespace Aelgi.Dragh2.Core.HUD
     {
         public int FPS { get; set; }
 
+        protected Position _position;
+
         public void Update(IGameUpdateService gameService)
         {
             FPS = gameService.GetFPS();
+            _position = (gameService.WindowSize / 2) - new Position(1, 1);
+            _position.Y *= -1;
         }
 
         public void Render(IGameRenderService gameService)
         {
-            var width = (uint)gameService.GetWindowWidth();
-            gameService.Text.DrawToScreen(width - 10, 28, 18, $"{FPS}", true);
+            gameService.DrawToScreen(_position, 18, $"{FPS}", true);
         }
     }
 }

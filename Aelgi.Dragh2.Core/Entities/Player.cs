@@ -7,7 +7,7 @@ namespace Aelgi.Dragh2.Core.Entities
 {
     public class Player : IDrawable
     {
-        public static int MoveSpeed = 1;
+        public static double MoveSpeed = 0.25;
 
         protected Position _drawPosition;
 
@@ -20,7 +20,7 @@ namespace Aelgi.Dragh2.Core.Entities
             if (gameService.IsPressed(Key.LEFT)) gameService.GamePosition.X -= MoveSpeed;
             if (gameService.IsPressed(Key.RIGHT)) gameService.GamePosition.X += MoveSpeed;
 
-            _drawPosition = gameService.WindowSize / 2;
+            _drawPosition = new Position(0, 0);
         }
 
         public void Render(IGameRenderService gameService)

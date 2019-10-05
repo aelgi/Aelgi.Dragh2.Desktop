@@ -1,17 +1,13 @@
-﻿using Aelgi.Dragh2.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Aelgi.Dragh2.Core.Enums;
+using Aelgi.Dragh2.Core.Models;
 
 namespace Aelgi.Dragh2.Core.IServices
 {
     public interface IGameRenderService
     {
-        ITextService Text { get; }
+        void DrawToScreen(Position pos, uint size, Colors color, string text, bool rightAlign = false);
+        void DrawToScreen(Position pos, uint size, string text, bool rightAlign = false);
 
         void DrawImage(Position pos, string imageName);
-
-        int GetWindowWidth();
-        int GetWindowHeight();
     }
 }

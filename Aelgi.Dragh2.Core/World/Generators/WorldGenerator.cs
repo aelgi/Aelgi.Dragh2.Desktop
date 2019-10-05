@@ -18,20 +18,23 @@ namespace Aelgi.Dragh2.Core.World.Generators
 
         public Chunk GenerateChunk(Position gamePosition)
         {
-            if (IsInRange(gamePosition.Y, SurfaceHeight, Chunk.ChunkHeight / 2))
-            {
-                Console.WriteLine($"Creating Plains Chunk: {gamePosition}");
-                return _plainsGenerator.GenerateChunk(gamePosition);
-            }
+            Console.WriteLine($"Create Chunk: {gamePosition}");
+            return new Chunk(gamePosition.Clone());
 
-            if (gamePosition.Y < 0)
-            {
-                Console.WriteLine("Creating Sky Chunk: {gamePosition}");
-                return _skyGenerator.GenerateChunk(gamePosition);
-            }
+            //if (IsInRange(gamePosition.Y, SurfaceHeight, Chunk.ChunkHeight / 2))
+            //{
+            //    Console.WriteLine($"Creating Plains Chunk: {gamePosition}");
+            //    return _plainsGenerator.GenerateChunk(gamePosition);
+            //}
 
-            Console.WriteLine($"Creating Mines Chunk: {gamePosition}");
-            return _minesGenerator.GenerateChunk(gamePosition);
+            //if (gamePosition.Y < 0)
+            //{
+            //    Console.WriteLine("Creating Sky Chunk: {gamePosition}");
+            //    return _skyGenerator.GenerateChunk(gamePosition);
+            //}
+
+            //Console.WriteLine($"Creating Mines Chunk: {gamePosition}");
+            //return _minesGenerator.GenerateChunk(gamePosition);
         }
     }
 }

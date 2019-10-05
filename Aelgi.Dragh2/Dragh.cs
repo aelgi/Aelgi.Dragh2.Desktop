@@ -2,6 +2,7 @@
 using Aelgi.Dragh2.Core.Enums;
 using Aelgi.Dragh2.Core.HUD;
 using Aelgi.Dragh2.Core.IServices;
+using Aelgi.Dragh2.Core.Models;
 using Aelgi.Dragh2.Core.World;
 using Aelgi.Dragh2.Core.World.Generators;
 using Aelgi.Dragh2.Services;
@@ -33,6 +34,7 @@ namespace Aelgi.Dragh2
     public class Dragh
     {
         protected IServiceProvider _services;
+        protected GameUpdateService _gameUpdateService;
         protected KeyboardService _keyboard;
         protected bool _close = false;
         protected Stopwatch _framesTimer = new Stopwatch();
@@ -44,7 +46,8 @@ namespace Aelgi.Dragh2
             services.AddSingleton<IStatsService, StatsService>();
             _keyboard = new KeyboardService();
             services.AddSingleton<IKeyboardService>(_keyboard);
-            services.AddSingleton<IGameUpdateService, GameUpdateService>();
+            services.AddSingleton<GameUpdateService>();
+            services.AddSingleton<IGameUpdateService>(provider => provider.GetRequiredService<GameUpdateService>());
 
             services.AddSingleton<EntityController>();
 
@@ -59,12 +62,12 @@ namespace Aelgi.Dragh2
             var services = new ServiceCollection();
 
             _services = RegisterServices(services);
+            _gameUpdateService = _services.GetRequiredService<GameUpdateService>();
 
             _services.GetService<IWorldController>().LoadChunks();
 
             var gameUpdate = _services.GetService<IGameUpdateService>();
-            //gameUpdate.GamePosition = new Core.Models.Position(400, 1024);
-            gameUpdate.GamePosition = new Core.Models.Position(0, Chunk.AverageHeight * Block.BlockSize);
+            gameUpdate.GamePosition = new Core.Models.Position(0, 0);
         }
 
         public void Run()
@@ -83,6 +86,7 @@ namespace Aelgi.Dragh2
                     var utility = _services.GetRequiredService<IUtilityService>();
                     var statsService = _services.GetRequiredService<IStatsService>();
                     var gameUpdateService = _services.GetRequiredService<IGameUpdateService>();
+                    gameUpdateService.WindowSize = new Position(window.Size.Width / Block.BlockSize, window.Size.Height / Block.BlockSize);
                     var keyboard = _services.GetRequiredService<IKeyboardService>();
                     var world = _services.GetRequiredService<IWorldController>();
                     var hud = _services.GetRequiredService<HUDController>();
@@ -91,7 +95,7 @@ namespace Aelgi.Dragh2
                     while (!window.IsClosing)
                     {
                         Update(window, statsService, gameUpdateService, keyboard, world, hud, entities);
-                        Render(window, canvas, utility, world, hud, entities);
+                        Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize);
                         Glfw.PollEvents();
                     }
                 }
@@ -106,22 +110,21 @@ namespace Aelgi.Dragh2
             var fps = 1000 * ts / 60;
 
             statsService.SetFPS((int)fps);
-            gameService.WindowSize = new Core.Models.Position(800, 600);
 
             _close |= keyboard.IsPressed(Key.ESCAPE);
 
-            world.Update(gameService);
+            //world.Update(gameService);
             hud.Update(gameService);
             entities.Update(gameService);
         }
 
-        protected void Render(NativeWindow window, SKCanvas canvas, IUtilityService utility, IWorldController world, HUDController hud, EntityController entities)
+        protected void Render(NativeWindow window, SKCanvas canvas, IUtilityService utility, IWorldController world, HUDController hud, EntityController entities, Position windowSize)
         {
             canvas.Clear(utility.ColorToSkia(Colors.Background));
 
-            var gameService = new GameRenderService(canvas, utility);
+            var gameService = new GameRenderService(canvas, utility, windowSize);
 
-            world.Render(gameService);
+            //world.Render(gameService);
             hud.Render(gameService);
             entities.Render(gameService);
 
@@ -198,6 +201,8 @@ namespace Aelgi.Dragh2
         private void SizeChanged(object sender, SizeChangeEventArgs e)
         {
             // We dont need to do anything at the moment because the main render loop re-renders
+            _gameUpdateService.WindowSize.X = e.Size.Width / Block.BlockSize;
+            _gameUpdateService.WindowSize.Y = e.Size.Height / Block.BlockSize;
         }
     }
 }
