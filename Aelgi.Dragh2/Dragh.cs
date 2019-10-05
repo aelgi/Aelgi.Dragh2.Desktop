@@ -97,6 +97,8 @@ namespace Aelgi.Dragh2
                         Update(window, statsService, gameUpdateService, keyboard, world, hud, entities);
                         Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize);
                         Glfw.PollEvents();
+
+                        if (keyboard.IsPressed(Key.ESCAPE)) break;
                     }
                 }
             }
