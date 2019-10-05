@@ -7,6 +7,7 @@ namespace Aelgi.Dragh2.Core.World.Generators
     {
         protected IGenerator _plainsGenerator = new PlainsGenerator();
         protected IGenerator _minesGenerator = new MineGenerator();
+        protected IGenerator _skyGenerator = new SkyGenerator();
         public static int SurfaceHeight => 300;
 
         public bool IsInRange(int val, int test, int deviation)
@@ -17,10 +18,16 @@ namespace Aelgi.Dragh2.Core.World.Generators
 
         public Chunk GenerateChunk(Position gamePosition)
         {
-            if (IsInRange(gamePosition.Y, SurfaceHeight, Chunk.ChunkHeight * Block.BlockSize))
+            if (IsInRange(gamePosition.Y, SurfaceHeight, Chunk.ChunkHeight / 2))
             {
                 Console.WriteLine($"Creating Plains Chunk: {gamePosition}");
                 return _plainsGenerator.GenerateChunk(gamePosition);
+            }
+
+            if (gamePosition.Y < 0)
+            {
+                Console.WriteLine("Creating Sky Chunk: {gamePosition}");
+                return _skyGenerator.GenerateChunk(gamePosition);
             }
 
             Console.WriteLine($"Creating Mines Chunk: {gamePosition}");

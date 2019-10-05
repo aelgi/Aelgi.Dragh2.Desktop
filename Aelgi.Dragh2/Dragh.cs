@@ -64,7 +64,7 @@ namespace Aelgi.Dragh2
 
             var gameUpdate = _services.GetService<IGameUpdateService>();
             //gameUpdate.GamePosition = new Core.Models.Position(400, 1024);
-            gameUpdate.GamePosition = new Core.Models.Position(0, 0);
+            gameUpdate.GamePosition = new Core.Models.Position(0, Chunk.AverageHeight * Block.BlockSize);
         }
 
         public void Run()
@@ -110,9 +110,9 @@ namespace Aelgi.Dragh2
 
             _close |= keyboard.IsPressed(Key.ESCAPE);
 
-            entities.Update(gameService);
             world.Update(gameService);
             hud.Update(gameService);
+            entities.Update(gameService);
         }
 
         protected void Render(NativeWindow window, SKCanvas canvas, IUtilityService utility, IWorldController world, HUDController hud, EntityController entities)
@@ -121,9 +121,9 @@ namespace Aelgi.Dragh2
 
             var gameService = new GameRenderService(canvas, utility);
 
-            entities.Render(gameService);
             world.Render(gameService);
             hud.Render(gameService);
+            entities.Render(gameService);
 
             canvas.Flush();
             window.SwapBuffers();

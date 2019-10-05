@@ -9,8 +9,8 @@ namespace Aelgi.Dragh2.Core.World
     public class Chunk : IDrawable
     {
         private static int ChunkSize => 64;
-        public static int ChunkWidth => ChunkSize;
-        public static int ChunkHeight => ChunkSize;
+        public static int ChunkWidth => ChunkSize * Block.BlockSize;
+        public static int ChunkHeight => ChunkSize * Block.BlockSize;
         public static int AverageHeight => 32;
 
         protected Dictionary<Position, Block> _blocks;
