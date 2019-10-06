@@ -4,7 +4,7 @@ about: Creates a feature request for a new Block, or creates a request for a ref
 title: "Block - $blockName"
 labels: block
 assignees: sanchez
-project: "aelgi/Dragh Game"
+project: "Dragh Game"
 
 ---
 
