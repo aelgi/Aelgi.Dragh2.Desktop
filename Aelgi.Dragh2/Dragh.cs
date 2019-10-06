@@ -67,7 +67,7 @@ namespace Aelgi.Dragh2
             _services.GetService<IWorldController>().LoadChunks();
 
             var gameUpdate = _services.GetService<IGameUpdateService>();
-            gameUpdate.GamePosition = new Core.Models.Position(0, 0);
+            gameUpdate.GamePosition = new Core.Models.Position(0, Chunk.AverageHeight);
         }
 
         public void Run()
@@ -115,7 +115,7 @@ namespace Aelgi.Dragh2
 
             _close |= keyboard.IsPressed(Key.ESCAPE);
 
-            //world.Update(gameService);
+            world.Update(gameService);
             hud.Update(gameService);
             entities.Update(gameService);
         }
@@ -126,7 +126,7 @@ namespace Aelgi.Dragh2
 
             var gameService = new GameRenderService(canvas, utility, windowSize);
 
-            //world.Render(gameService);
+            world.Render(gameService);
             hud.Render(gameService);
             entities.Render(gameService);
 

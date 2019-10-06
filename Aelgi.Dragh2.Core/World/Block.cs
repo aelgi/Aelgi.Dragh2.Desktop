@@ -7,7 +7,7 @@ namespace Aelgi.Dragh2.Core.World
     public abstract class Block : IDrawable
     {
         public Position Position { get; set; }
-        public Position WorldPosition { get; set; }
+        public Position ChunkPosition { get; set; }
 
         protected Position _positionOnScreen;
 
@@ -15,14 +15,16 @@ namespace Aelgi.Dragh2.Core.World
 
         public void DrawImage(IGameRenderService gameService, string imageName)
         {
-            if (_positionOnScreen.X < 0 || _positionOnScreen.Y < 0) return;
             gameService.DrawImage(_positionOnScreen, imageName);
         }
 
         public abstract void Render(IGameRenderService gameService);
         public void Update(IGameUpdateService gameService)
         {
-            _positionOnScreen = (WorldPosition - gameService.GamePosition) + (Position * BlockSize);
+            var realPosition = ChunkPosition + Position;
+            _positionOnScreen = realPosition - gameService.GamePosition;
+            //_positionOnScreen = (ChunkPosition - gameService.GamePosition) + Position;
+            //_positionOnScreen = new Position(0, 0);
         }
     }
 }

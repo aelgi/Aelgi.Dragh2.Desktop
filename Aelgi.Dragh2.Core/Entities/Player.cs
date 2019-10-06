@@ -20,7 +20,7 @@ namespace Aelgi.Dragh2.Core.Entities
             if (gameService.IsPressed(Key.LEFT)) gameService.GamePosition.X -= MoveSpeed;
             if (gameService.IsPressed(Key.RIGHT)) gameService.GamePosition.X += MoveSpeed;
 
-            _drawPosition = new Position(0, 0);
+            _drawPosition = new Position(0, -2);
         }
 
         public void Render(IGameRenderService gameService)

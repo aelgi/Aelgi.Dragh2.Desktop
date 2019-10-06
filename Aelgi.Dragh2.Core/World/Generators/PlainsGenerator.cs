@@ -25,23 +25,17 @@ namespace Aelgi.Dragh2.Core.World.Generators
 
             var chunk = new Chunk(gamePosition);
 
-            for (var x = 0; x < Chunk.ChunkWidth; x += Block.BlockSize)
+            var lastX = Chunk.AverageHeight;
+            for (var x = 0; x < Chunk.ChunkWidth; x++)
             {
-                chunk.SetBlock(new Position(x, Chunk.AverageHeight * Block.BlockSize), new TopDirt());
+                lastX += rnd.Next(-1, 2);
+                lastX = CapChunkHeight(lastX);
+                chunk.SetBlock(new Position(x, lastX), new TopDirt());
+                for (var y = Chunk.ChunkHeight; y > lastX; y--)
+                {
+                    chunk.SetBlock(new Position(x, y), new Dirt());
+                }
             }
-
-            //var lastX = Chunk.AverageHeight;
-            //for (var x = 0; x < Chunk.ChunkHeight; x++)
-            //{
-            //    lastX += rnd.Next(-3, 3);
-            //    lastX = CapChunkHeight(lastX);
-            //    Console.WriteLine($"X: {lastX}");
-            //    chunk.SetBlock(new Position(x, lastX), new Dirt());
-            //    for (var y = 0; y < (lastX + 1); y++)
-            //    {
-            //        //chunk.SetBlock(new Position(x, y), new Dirt());
-            //    }
-            //}
 
             return chunk;
         }
