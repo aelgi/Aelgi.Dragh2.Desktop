@@ -5,6 +5,8 @@ namespace Aelgi.Dragh2.Core.IServices
 {
     public interface IGameUpdateService
     {
+        IWorldController WorldController { get; }
+
         Position WindowSize { get; set; }
         Position GamePosition { get; set; }
 

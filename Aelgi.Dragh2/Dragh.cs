@@ -51,13 +51,13 @@ namespace Aelgi.Dragh2
             services.AddSingleton<IStatsService, StatsService>();
             _keyboard = new KeyboardService();
             services.AddSingleton<IKeyboardService>(_keyboard);
+            services.AddSingleton<IWorldController>(new WorldController(new WorldGenerator()));
             services.AddSingleton<GameUpdateService>();
             services.AddSingleton<IGameUpdateService>(provider => provider.GetRequiredService<GameUpdateService>());
 
             services.AddSingleton<EntityController>();
 
             services.AddSingleton<HUDController>();
-            services.AddSingleton<IWorldController>(new WorldController(new WorldGenerator()));
 
             return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }

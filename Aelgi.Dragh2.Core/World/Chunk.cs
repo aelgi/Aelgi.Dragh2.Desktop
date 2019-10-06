@@ -30,6 +30,13 @@ namespace Aelgi.Dragh2.Core.World
             return _blocks[new Position(x, y)];
         }
 
+        public Block GetBlock(Position pos)
+        {
+            var relativePosition = pos - _chunkOrigin;
+            if (_blocks.ContainsKey(relativePosition)) return _blocks[relativePosition];
+            return null;
+        }
+
         public bool HasBlock(int x, int y) => GetBlock(x, y) != null;
 
         public void SetBlock(Position pos, Block block)

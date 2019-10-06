@@ -1,6 +1,7 @@
 ﻿using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
 using Aelgi.Dragh2.Core.World.Generators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +22,14 @@ namespace Aelgi.Dragh2.Core.World
             _loadedChunks = new Dictionary<Position, Chunk>();
         }
 
-        protected List<Position> GetChunksPositionsOnScreen(Position gamePosition, Position windowSize)
+        protected Position RoundToChunk(Position pos)
+        {
+            var x = Math.Floor(pos.X / Chunk.ChunkWidth) * Chunk.ChunkWidth;
+            var y = Math.Floor(pos.Y / Chunk.ChunkHeight) * Chunk.ChunkHeight;
+            return new Position(x, y);
+        }
+
+        protected List<Position> GetChunksPositionsOnScreen(Position gamePosition)
         {
             var positions = new List<Position>();
 
@@ -48,11 +56,22 @@ namespace Aelgi.Dragh2.Core.World
             return _loadedChunks[pos];
         }
 
+        public bool IsGrounded(Position pos)
+        {
+            //var chunkX = pos.X - (pos.X % Chunk.ChunkWidth);
+            //var chunkY = pos.Y - (pos.Y % Chunk.ChunkHeight);
+            //var chunkPos = new Position(chunkX, chunkY);
+            var chunkPos = RoundToChunk(pos);
+            var chunk = GetChunk(chunkPos);
+
+            return chunk.GetBlock(pos) != null;
+        }
+
         protected List<Chunk> _selectedChunks;
 
         public void Update(IGameUpdateService gameService)
         {
-            var positions = GetChunksPositionsOnScreen(gameService.GamePosition, gameService.WindowSize);
+            var positions = GetChunksPositionsOnScreen(gameService.GamePosition);
             _selectedChunks = positions.Select(x => GetChunk(x)).ToList();
 
             foreach (var chunk in _selectedChunks) chunk.Update(gameService);

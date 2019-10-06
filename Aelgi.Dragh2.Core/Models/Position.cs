@@ -14,14 +14,23 @@ namespace Aelgi.Dragh2.Core.Models
         }
         public Position() : this(0, 0) { }
 
-        public Position Clone()
+        public Position Clone() => new Position(X, Y);
+        public Position Add(double x, double y) => new Position(X + x, Y + y);
+        public Position Ceil() => new Position(Math.Ceiling(X), Math.Ceiling(Y));
+        public Position Floor() => new Position(Math.Floor(X), Math.Floor(Y));
+
+        public Position Ceil(bool x, bool y)
         {
-            return new Position(X, Y);
+            var newX = x ? Math.Ceiling(X) : X;
+            var newY = y ? Math.Ceiling(Y) : Y;
+            return new Position(newX, newY);
         }
 
-        public Position Add(double x, double y)
+        public Position Floor(bool x, bool y)
         {
-            return new Position(X + x, Y + y);
+            var newX = x ? Math.Floor(X) : X;
+            var newY = y ? Math.Floor(Y) : Y;
+            return new Position(newX, newY);
         }
 
         public static Position operator +(Position pos) => new Position(pos.X, pos.Y);
