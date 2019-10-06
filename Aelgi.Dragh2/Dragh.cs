@@ -33,6 +33,11 @@ namespace Aelgi.Dragh2
 
     public class Dragh
     {
+        public int InitialGameWidth => 1024;
+        public int InitialGameHeight => 800;
+
+        public int GameToWindowSize(double size) => (int)Math.Ceiling(size * Block.BlockSize);
+
         protected IServiceProvider _services;
         protected GameUpdateService _gameUpdateService;
         protected KeyboardService _keyboard;
@@ -72,7 +77,7 @@ namespace Aelgi.Dragh2
 
         public void Run()
         {
-            using (var window = new NativeWindow(800, 600, "Dragh 2.0"))
+            using (var window = new NativeWindow(InitialGameWidth, InitialGameHeight, "Dragh 2.0"))
             {
                 window.SizeChanged += SizeChanged;
                 window.MouseMoved += MouseMoved;
@@ -94,6 +99,7 @@ namespace Aelgi.Dragh2
 
                     while (!window.IsClosing)
                     {
+                        //canvas.ClipRect(new SKRect(0, 0, GameToWindowSize(gameUpdateService.WindowSize.X), GameToWindowSize(gameUpdateService.WindowSize.Y)));
                         Update(window, statsService, gameUpdateService, keyboard, world, hud, entities);
                         Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize);
                         Glfw.PollEvents();
@@ -203,8 +209,8 @@ namespace Aelgi.Dragh2
         private void SizeChanged(object sender, SizeChangeEventArgs e)
         {
             // We dont need to do anything at the moment because the main render loop re-renders
-            _gameUpdateService.WindowSize.X = e.Size.Width / Block.BlockSize;
-            _gameUpdateService.WindowSize.Y = e.Size.Height / Block.BlockSize;
+            _gameUpdateService.WindowSize.X = (double)e.Size.Width / Block.BlockSize;
+            _gameUpdateService.WindowSize.Y = (double)e.Size.Height / Block.BlockSize;
         }
     }
 }
