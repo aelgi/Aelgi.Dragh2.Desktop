@@ -99,7 +99,7 @@ namespace Aelgi.Dragh2
 
                     while (!window.IsClosing)
                     {
-                        //canvas.ClipRect(new SKRect(0, 0, GameToWindowSize(gameUpdateService.WindowSize.X), GameToWindowSize(gameUpdateService.WindowSize.Y)));
+                        //canvas.ClipRect(new SKRect(0, 0, GameToWindowSize(gameUpdateService.WindowSize.X), GameToWindowSize(gameUpdateService.WindowSize.Y)), SKClipOperation.Intersect, true);
                         Update(window, statsService, gameUpdateService, keyboard, world, hud, entities);
                         Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize);
                         Glfw.PollEvents();
