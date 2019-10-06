@@ -25,9 +25,6 @@ namespace Aelgi.Dragh2.Core.World
         {
             var positions = new List<Position>();
 
-            //var x = gamePosition.X * Chunk.ChunkWidth;
-            //var y = gamePosition.Y * Chunk.ChunkHeight - Chunk.ChunkHeight / 2;
-
             var dev = 1;
             var minX = gamePosition.X - (gamePosition.X % Chunk.ChunkWidth) - (Chunk.ChunkWidth * dev);
             var maxX = gamePosition.X - (gamePosition.X % Chunk.ChunkWidth) + (Chunk.ChunkWidth * dev);
@@ -37,23 +34,6 @@ namespace Aelgi.Dragh2.Core.World
             for (var i = minX; i <= maxX; i += Chunk.ChunkWidth)
                 for (var j = minY; j <= maxY; j += Chunk.ChunkHeight)
                     positions.Add(new Position(i, j));
-
-            //var width = Chunk.ChunkWidth * Block.BlockSize;
-            //var height = Chunk.ChunkHeight * Block.BlockSize;
-
-            //var topLeft = gamePosition - (windowSize / 2) - new Position(width, height);
-            //var topLeftX = topLeft.X % Chunk.ChunkWidth;
-            //var topLeftY = topLeft.Y % Chunk.ChunkHeight;
-            //var bottomRight = gamePosition + (windowSize / 2) + new Position(width, height);
-            //var maxX = bottomRight.X;
-            //var maxY = bottomRight.Y;
-
-
-            //for (var i = topLeftX; i <= maxX; i += width)
-            //    for (var j = topLeftY; j <= maxY; j += height)
-            //    {
-            //        positions.Add(new Position(i, j));
-            //    }
 
             return positions;
         }
