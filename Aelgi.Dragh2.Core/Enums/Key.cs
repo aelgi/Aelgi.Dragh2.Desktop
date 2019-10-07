@@ -4,7 +4,10 @@
     {
         NONE,
 
-        USE,
+        DIG_UP,
+        DIG_DOWN,
+        DIG_LEFT,
+        DIG_RIGHT,
 
         LEFT,
         RIGHT,

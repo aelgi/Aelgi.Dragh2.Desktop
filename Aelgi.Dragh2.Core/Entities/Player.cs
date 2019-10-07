@@ -35,10 +35,13 @@ namespace Aelgi.Dragh2.Core.Entities
         {
             var bottomLeft = worldPosition + new Position(-Width, -0.1);
             var bottomRight = worldPosition + new Position(Width, -0.1);
+            var topLeft = worldPosition + new Position(-Width, -1.9);
+            var topRight = worldPosition + new Position(Width, -1.9);
 
-            var isLeft = gameService.WorldController.IsGrounded(bottomLeft);
-            var isRight = gameService.WorldController.IsGrounded(bottomRight);
+            var isLeft = gameService.WorldController.IsGrounded(bottomLeft) || gameService.WorldController.IsGrounded(topLeft);
+            var isRight = gameService.WorldController.IsGrounded(bottomRight) || gameService.WorldController.IsGrounded(topRight);
             var isGrounded = gameService.WorldController.IsGrounded(worldPosition);
+            var isTop = gameService.WorldController.IsGrounded(worldPosition + new Position(0, -2));
 
             if (!isGrounded)
             {
@@ -62,32 +65,49 @@ namespace Aelgi.Dragh2.Core.Entities
                 _playerDirection = PlayerDirection.RIGHT;
             }
 
+            if (isTop && _jumpPosition < 60)
+            {
+                _jumpPosition = 60;
+            }
+
             if (_jumpPosition != 0) gameService.GamePosition.Y += GetJumpHeight();
         }
 
         private void HandlePlayerHit(IGameUpdateService gameService, Position worldPosition)
         {
-            if (gameService.IsPressed(Key.USE))
+            if (gameService.IsPressed(Key.DIG_DOWN))
+            {
+                var bottom = worldPosition + new Position(0, 0.1);
+                var bottomBlock = gameService.WorldController.GetBlock(bottom);
+                if (bottomBlock != null) bottomBlock.OnHit();
+            }
+            else if (gameService.IsPressed(Key.DIG_UP))
+            {
+                var top = worldPosition + new Position(0, -2.1);
+                var topBlock = gameService.WorldController.GetBlock(top);
+                if (topBlock != null) topBlock.OnHit();
+            }
+            else if (gameService.IsPressed(Key.DIG_LEFT))
             {
                 var top = worldPosition + new Position(-Width, -1.1);
                 var bottom = worldPosition + new Position(-Width, -0.1);
-                if (_playerDirection == PlayerDirection.RIGHT)
-                {
-                    top = worldPosition + new Position(Width, -1.1);
-                    bottom = worldPosition + new Position(Width, -0.1);
-                }
 
                 var topBlock = gameService.WorldController.GetBlock(top);
+                var bottomBlock = gameService.WorldController.GetBlock(bottom);
 
-                if (topBlock != null)
-                {
-                    topBlock.OnHit();
-                }
-                else
-                {
-                    var bottomBlock = gameService.WorldController.GetBlock(bottom);
-                    if (bottomBlock != null) bottomBlock.OnHit();
-                }
+                if (topBlock != null) topBlock.OnHit();
+                else if (bottomBlock != null) bottomBlock.OnHit();
+            }
+            else if (gameService.IsPressed(Key.DIG_RIGHT))
+            {
+                var top = worldPosition + new Position(Width, -1.1);
+                var bottom = worldPosition + new Position(Width, -0.1);
+
+                var topBlock = gameService.WorldController.GetBlock(top);
+                var bottomBlock = gameService.WorldController.GetBlock(bottom);
+
+                if (topBlock != null) topBlock.OnHit();
+                else if (bottomBlock != null) bottomBlock.OnHit();
             }
         }
 

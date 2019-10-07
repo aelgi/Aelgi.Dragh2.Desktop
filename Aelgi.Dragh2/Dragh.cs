@@ -182,9 +182,14 @@ namespace Aelgi.Dragh2
                 case Keys.S:
                     return Key.DOWN;
 
-                case Keys.E:
-                case Keys.Space:
-                    return Key.USE;
+                case Keys.J:
+                    return Key.DIG_LEFT;
+                case Keys.K:
+                    return Key.DIG_DOWN;
+                case Keys.L:
+                    return Key.DIG_RIGHT;
+                case Keys.I:
+                    return Key.DIG_UP;
 
                 default: return Key.NONE;
             }
