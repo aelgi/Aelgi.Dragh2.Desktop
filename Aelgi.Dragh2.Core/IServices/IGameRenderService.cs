@@ -11,5 +11,7 @@ namespace Aelgi.Dragh2.Core.IServices
         void DrawImage(Position pos, string imageName);
 
         void DrawDot(Position pos, Colors color);
+
+        void DrawRect(Position topLeft, Position bottomRight, Colors color);
     }
 }

@@ -3,6 +3,7 @@ using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aelgi.Dragh2.Core.World
 {
@@ -46,8 +47,14 @@ namespace Aelgi.Dragh2.Core.World
             _blocks[roundedPos] = block;
         }
 
+        protected Dictionary<Position, Block> GetAliveBlocks()
+        {
+            return _blocks.Where(x => x.Value.IsAlive).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
         public void Update(IGameUpdateService gameService)
         {
+            _blocks = GetAliveBlocks();
             foreach (var block in _blocks)
                 block.Value.Update(gameService);
         }

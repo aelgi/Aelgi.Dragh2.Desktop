@@ -178,10 +178,14 @@ namespace Aelgi.Dragh2
                 case Keys.Escape:
                     return Key.ESCAPE;
                 case Keys.W:
-                case Keys.Space:
                     return Key.UP;
                 case Keys.S:
                     return Key.DOWN;
+
+                case Keys.E:
+                case Keys.Space:
+                    return Key.USE;
+
                 default: return Key.NONE;
             }
         }

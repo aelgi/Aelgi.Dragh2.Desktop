@@ -96,5 +96,19 @@ namespace Aelgi.Dragh2.Services
             var dPos = GameToSkia(pos);
             _canvas.DrawCircle(new SKPoint(dPos.X, dPos.Y), 2f, paint);
         }
+
+        public void DrawRect(Position topLeft, Position bottomRight, Colors color)
+        {
+            var convertedColor = UtilityService.ColorToSkia(color);
+            var paint = new SKPaint
+            {
+                Color = convertedColor,
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+            };
+            var dTopLeft = GameToSkia(topLeft);
+            var dBottomRight = GameToSkia(bottomRight);
+            _canvas.DrawRect(new SKRect(dTopLeft.X, dTopLeft.Y, dBottomRight.X, dBottomRight.Y), paint);
+        }
     }
 }

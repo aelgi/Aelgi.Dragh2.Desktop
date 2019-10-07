@@ -1,5 +1,6 @@
 ﻿using Aelgi.Dragh2.Core.IModels;
 using Aelgi.Dragh2.Core.Models;
+using Aelgi.Dragh2.Core.World;
 
 namespace Aelgi.Dragh2.Core.IServices
 {
@@ -8,5 +9,6 @@ namespace Aelgi.Dragh2.Core.IServices
         void LoadChunks();
 
         bool IsGrounded(Position pos);
+        Block GetBlock(Position pos);
     }
 }

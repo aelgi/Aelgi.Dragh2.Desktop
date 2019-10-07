@@ -5,6 +5,12 @@ using Aelgi.Dragh2.Core.Models;
 
 namespace Aelgi.Dragh2.Core.Entities
 {
+    public enum PlayerDirection
+    {
+        LEFT,
+        RIGHT
+    }
+
     public class Player : IDrawable
     {
         public static double MoveSpeed = 0.1;
@@ -13,6 +19,8 @@ namespace Aelgi.Dragh2.Core.Entities
         protected Position _drawPosition = new Position(-0.5, -2);
         protected Position _playerPosition = new Position(0, 0);
         protected double _jumpPosition = 0;
+
+        protected PlayerDirection _playerDirection = PlayerDirection.RIGHT;
 
         protected double GetJumpHeight()
         {
@@ -23,9 +31,8 @@ namespace Aelgi.Dragh2.Core.Entities
 
         protected string _imageName => "Player";
 
-        public void Update(IGameUpdateService gameService)
+        private void HandlePlayerMove(IGameUpdateService gameService, Position worldPosition)
         {
-            var worldPosition = _playerPosition + gameService.GamePosition;
             var bottomLeft = worldPosition + new Position(-Width, -0.1);
             var bottomRight = worldPosition + new Position(Width, -0.1);
 
@@ -44,10 +51,52 @@ namespace Aelgi.Dragh2.Core.Entities
                 if (gameService.IsPressed(Key.UP)) _jumpPosition = 0.2;
             }
 
-            if (gameService.IsPressed(Key.LEFT) && !isLeft) gameService.GamePosition.X -= MoveSpeed;
-            if (gameService.IsPressed(Key.RIGHT) && !isRight) gameService.GamePosition.X += MoveSpeed;
+            if (gameService.IsPressed(Key.LEFT) && !isLeft)
+            {
+                gameService.GamePosition.X -= MoveSpeed;
+                _playerDirection = PlayerDirection.LEFT;
+            }
+            if (gameService.IsPressed(Key.RIGHT) && !isRight)
+            {
+                gameService.GamePosition.X += MoveSpeed;
+                _playerDirection = PlayerDirection.RIGHT;
+            }
 
             if (_jumpPosition != 0) gameService.GamePosition.Y += GetJumpHeight();
+        }
+
+        private void HandlePlayerHit(IGameUpdateService gameService, Position worldPosition)
+        {
+            if (gameService.IsPressed(Key.USE))
+            {
+                var top = worldPosition + new Position(-Width, -1.1);
+                var bottom = worldPosition + new Position(-Width, -0.1);
+                if (_playerDirection == PlayerDirection.RIGHT)
+                {
+                    top = worldPosition + new Position(Width, -1.1);
+                    bottom = worldPosition + new Position(Width, -0.1);
+                }
+
+                var topBlock = gameService.WorldController.GetBlock(top);
+
+                if (topBlock != null)
+                {
+                    topBlock.OnHit();
+                }
+                else
+                {
+                    var bottomBlock = gameService.WorldController.GetBlock(bottom);
+                    if (bottomBlock != null) bottomBlock.OnHit();
+                }
+            }
+        }
+
+        public void Update(IGameUpdateService gameService)
+        {
+            var worldPosition = _playerPosition + gameService.GamePosition;
+
+            HandlePlayerMove(gameService, worldPosition);
+            HandlePlayerHit(gameService, worldPosition);
         }
 
         public void Render(IGameRenderService gameService)

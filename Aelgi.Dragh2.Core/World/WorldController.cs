@@ -58,13 +58,16 @@ namespace Aelgi.Dragh2.Core.World
 
         public bool IsGrounded(Position pos)
         {
-            //var chunkX = pos.X - (pos.X % Chunk.ChunkWidth);
-            //var chunkY = pos.Y - (pos.Y % Chunk.ChunkHeight);
-            //var chunkPos = new Position(chunkX, chunkY);
             var chunkPos = RoundToChunk(pos);
             var chunk = GetChunk(chunkPos);
 
             return chunk.GetBlock(pos) != null;
+        }
+
+        public Block GetBlock(Position pos)
+        {
+            var chunk = GetChunk(RoundToChunk(pos));
+            return chunk.GetBlock(pos);
         }
 
         protected List<Chunk> _selectedChunks;
