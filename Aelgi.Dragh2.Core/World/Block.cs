@@ -41,7 +41,7 @@ namespace Aelgi.Dragh2.Core.World
             var percentPos = percent / 2;
             var topLeft = center - new Position(percentPos, percentPos);
             var bottomRight = center + new Position(percentPos, percentPos);
-            gameService.DrawRect(topLeft, bottomRight, Enums.Colors.White);
+            gameService.DrawRect(topLeft, bottomRight, Enums.Colors.White, true);
         }
 
         public abstract void Render(IGameRenderService gameService);

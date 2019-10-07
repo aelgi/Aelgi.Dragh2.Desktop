@@ -12,6 +12,6 @@ namespace Aelgi.Dragh2.Core.IServices
 
         void DrawDot(Position pos, Colors color);
 
-        void DrawRect(Position topLeft, Position bottomRight, Colors color);
+        void DrawRect(Position topLeft, Position bottomRight, Colors color, bool overlay = false);
     }
 }

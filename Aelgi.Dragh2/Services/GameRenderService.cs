@@ -97,7 +97,7 @@ namespace Aelgi.Dragh2.Services
             _canvas.DrawCircle(new SKPoint(dPos.X, dPos.Y), 2f, paint);
         }
 
-        public void DrawRect(Position topLeft, Position bottomRight, Colors color)
+        public void DrawRect(Position topLeft, Position bottomRight, Colors color, bool overlay = false)
         {
             var convertedColor = UtilityService.ColorToSkia(color);
             var paint = new SKPaint
@@ -105,7 +105,9 @@ namespace Aelgi.Dragh2.Services
                 Color = convertedColor,
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
+                BlendMode = overlay ? SKBlendMode.Difference : SKBlendMode.SrcATop,
             };
+
             var dTopLeft = GameToSkia(topLeft);
             var dBottomRight = GameToSkia(bottomRight);
             _canvas.DrawRect(new SKRect(dTopLeft.X, dTopLeft.Y, dBottomRight.X, dBottomRight.Y), paint);
