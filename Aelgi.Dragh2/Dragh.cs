@@ -41,7 +41,6 @@ namespace Aelgi.Dragh2
         protected IServiceProvider _services;
         protected GameUpdateService _gameUpdateService;
         protected KeyboardService _keyboard;
-        protected bool _close = false;
         protected Stopwatch _framesTimer = new Stopwatch();
 
         protected IServiceProvider RegisterServices(IServiceCollection services)
@@ -118,8 +117,6 @@ namespace Aelgi.Dragh2
             var fps = 1000 * ts / 60;
 
             statsService.SetFPS((int)fps);
-
-            _close |= keyboard.IsPressed(Key.ESCAPE);
 
             world.Update(gameService);
             hud.Update(gameService);
