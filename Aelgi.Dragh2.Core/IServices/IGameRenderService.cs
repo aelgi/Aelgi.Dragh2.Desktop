@@ -9,5 +9,7 @@ namespace Aelgi.Dragh2.Core.IServices
         void DrawToScreen(Position pos, uint size, string text, bool rightAlign = false);
 
         void DrawImage(Position pos, string imageName);
+
+        void DrawDot(Position pos, Colors color);
     }
 }

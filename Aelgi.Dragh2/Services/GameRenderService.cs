@@ -82,5 +82,19 @@ namespace Aelgi.Dragh2.Services
         {
             DrawToScreen(pos, size, Colors.Black, text, rightAlign);
         }
+
+        public void DrawDot(Position pos, Colors color)
+        {
+            var convertedColor = UtilityService.ColorToSkia(color);
+            var paint = new SKPaint
+            {
+                Color = convertedColor,
+                IsAntialias = true,
+                Style = SKPaintStyle.StrokeAndFill,
+                StrokeWidth = 4,
+            };
+            var dPos = GameToSkia(pos);
+            _canvas.DrawCircle(new SKPoint(dPos.X, dPos.Y), 2f, paint);
+        }
     }
 }

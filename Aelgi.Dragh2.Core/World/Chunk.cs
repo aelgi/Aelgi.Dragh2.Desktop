@@ -22,32 +22,28 @@ namespace Aelgi.Dragh2.Core.World
             _blocks = new Dictionary<Position, Block>();
         }
 
-        public Block GetBlock(int x, int y)
+        public static Position RoundToBlock(Position pos)
         {
-            if (x < 0 || x >= ChunkWidth) throw new ArgumentOutOfRangeException();
-            if (y < 0 || y >= ChunkHeight) throw new ArgumentOutOfRangeException();
-
-            return _blocks[new Position(x, y)];
+            return new Position(Math.Floor(pos.X), Math.Floor(pos.Y));
         }
 
         public Block GetBlock(Position pos)
         {
-            var relativePosition = pos - _chunkOrigin;
+            var relativePosition = RoundToBlock(pos - _chunkOrigin);
             if (_blocks.ContainsKey(relativePosition)) return _blocks[relativePosition];
             return null;
         }
-
-        public bool HasBlock(int x, int y) => GetBlock(x, y) != null;
 
         public void SetBlock(Position pos, Block block)
         {
             if (pos < new Position(0, 0)) throw new ArgumentOutOfRangeException();
             if (pos >= new Position(ChunkWidth, ChunkHeight)) throw new ArgumentOutOfRangeException();
 
-            block.Position = pos.Clone();
+            var roundedPos = RoundToBlock(pos);
+            block.Position = roundedPos;
             block.ChunkPosition = _chunkOrigin.Clone();
 
-            _blocks[pos] = block;
+            _blocks[roundedPos] = block;
         }
 
         public void Update(IGameUpdateService gameService)
