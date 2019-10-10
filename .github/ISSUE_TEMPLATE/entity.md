@@ -1,10 +1,9 @@
 ---
 name: Entity
 about: Creates a feature request to add an entity to the game
-title: "Entity - $entityName"
+title: Entity - $entityName
 labels: entity
-assignees:
-projects: "aelgi/Dragh Game"
+assignees: ''
 
 ---
 

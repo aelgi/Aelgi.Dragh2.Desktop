@@ -1,10 +1,10 @@
 ---
 name: Blocks
-about: Creates a feature request for a new Block, or creates a request for a refinement to a block
-title: "Block - $blockName"
+about: Creates a feature request for a new Block, or creates a request for a refinement
+  to a block
+title: Block - $blockName
 labels: block
-assignees:
-projects: "aelgi/Dragh Game"
+assignees: ''
 
 ---
 
