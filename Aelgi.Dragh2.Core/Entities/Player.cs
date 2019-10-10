@@ -24,7 +24,7 @@ namespace Aelgi.Dragh2.Core.Entities
 
         protected double GetJumpHeight()
         {
-            var x = _jumpPosition / 60;
+            var x = _jumpPosition / 45;
             // y = x^2 - 1
             return ((x * x) - 1) / 20;
         }
