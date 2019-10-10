@@ -3,8 +3,7 @@ name: Report a Bug
 about: Alerts the developers to a bug you have found in the game
 title: Bug Title
 labels: bug
-assignees:
-projects: "aelgi/Dragh Game"
+assignees: ''
 
 ---
 
