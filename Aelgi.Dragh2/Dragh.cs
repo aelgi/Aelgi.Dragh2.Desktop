@@ -74,7 +74,7 @@ namespace Aelgi.Dragh2
             _services.GetService<IWorldController>().LoadChunks();
 
             var gameUpdate = _services.GetService<IGameUpdateService>();
-            gameUpdate.GamePosition = new Core.Models.Position(0, Chunk.AverageHeight);
+            gameUpdate.GamePosition = new Position(0, Chunk.AverageHeight);
         }
 
         public void Run()
@@ -102,6 +102,10 @@ namespace Aelgi.Dragh2
                     var frameDelay = 0;
                     var lastReadings = new List<int>();
                     var fpsReadings = new CircularBuffer<double>(10);
+                    var targetFPS = 60;
+
+                    var upperFPS = targetFPS + 5;
+                    var lowerFPS = targetFPS - 5;
 
                     while (!window.IsClosing)
                     {
@@ -111,12 +115,14 @@ namespace Aelgi.Dragh2
                         double milliseconds = _framesTimer.ElapsedMilliseconds;
                         _framesTimer.Restart();
 
-                        if (milliseconds <= 30) frameDelay++;
-                        if (milliseconds >= 36) frameDelay--;
-
                         var fps = 1 / (milliseconds / 1000);
                         fpsReadings.Add(fps);
                         var averageFps = fpsReadings.Average();
+
+                        if (averageFps < lowerFPS) frameDelay--;
+                        if (averageFps > upperFPS) frameDelay++;
+
+                        Console.WriteLine($"Frame Delay: {frameDelay}, FPS: {averageFps}");
                         statsService.SetFPS((int)averageFps);
 
                         if (frameDelay > 0) Thread.Sleep(frameDelay);
@@ -190,8 +196,6 @@ namespace Aelgi.Dragh2
                     return Key.LEFT;
                 case Keys.D:
                     return Key.RIGHT;
-                case Keys.Escape:
-                    return Key.ESCAPE;
                 case Keys.W:
                     return Key.UP;
                 case Keys.S:
@@ -205,6 +209,11 @@ namespace Aelgi.Dragh2
                     return Key.DIG_RIGHT;
                 case Keys.I:
                     return Key.DIG_UP;
+
+                case Keys.Escape:
+                    return Key.ESCAPE;
+                case Keys.E:
+                    return Key.INVENTORY;
 
                 default: return Key.NONE;
             }
