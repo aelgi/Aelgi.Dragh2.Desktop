@@ -21,7 +21,8 @@ namespace Aelgi.Dragh2.Core.HUD
             _right = gameService.IsPressed(Key.RIGHT);
             _up = gameService.IsPressed(Key.UP);
 
-            _drawPos = (gameService.WindowSize / 2) * -1;
+            _drawPos = (gameService.WindowSize / 2);
+            _drawPos.X *= -1;
 
             _lastPosition = gameService.GamePosition.Clone();
         }
@@ -29,13 +30,13 @@ namespace Aelgi.Dragh2.Core.HUD
         public void Render(IGameRenderService gameService)
         {
             uint lineHeight = 18;
-            var basePosition = _drawPos.Add(0, 1);
+            var basePosition = _drawPos.Add(0, -1);
             gameService.DrawToScreen(basePosition, lineHeight, "The current keyboard readout:");
-            gameService.DrawToScreen(basePosition.Add(0, .5), lineHeight, $"Escape Key: {_escape}");
-            gameService.DrawToScreen(basePosition.Add(0, 1), lineHeight, $"Left Key: {_left}");
-            gameService.DrawToScreen(basePosition.Add(0, 1.5), lineHeight, $"Right Key: {_right}");
-            gameService.DrawToScreen(basePosition.Add(0, 2), lineHeight, $"Up Key: {_up}");
-            gameService.DrawToScreen(basePosition.Add(0, 4), lineHeight, $"Game Position: {_lastPosition}");
+            gameService.DrawToScreen(basePosition.Add(0, -0.5), lineHeight, $"Escape Key: {_escape}");
+            gameService.DrawToScreen(basePosition.Add(0, -1), lineHeight, $"Left Key: {_left}");
+            gameService.DrawToScreen(basePosition.Add(0, -1.5), lineHeight, $"Right Key: {_right}");
+            gameService.DrawToScreen(basePosition.Add(0, -2), lineHeight, $"Up Key: {_up}");
+            gameService.DrawToScreen(basePosition.Add(0, -4), lineHeight, $"Game Position: {_lastPosition}");
         }
     }
 }

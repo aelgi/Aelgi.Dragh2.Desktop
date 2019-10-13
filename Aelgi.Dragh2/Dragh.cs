@@ -3,6 +3,7 @@ using Aelgi.Dragh2.Core.Enums;
 using Aelgi.Dragh2.Core.HUD;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
+using Aelgi.Dragh2.Core.Screens;
 using Aelgi.Dragh2.Core.World;
 using Aelgi.Dragh2.Core.World.Generators;
 using Aelgi.Dragh2.Services;
@@ -60,6 +61,7 @@ namespace Aelgi.Dragh2
             services.AddSingleton<EntityController>();
 
             services.AddSingleton<HUDController>();
+            services.AddSingleton<ScreensController>();
 
             return services.BuildServiceProvider().CreateScope().ServiceProvider;
         }
@@ -98,6 +100,7 @@ namespace Aelgi.Dragh2
                     var world = _services.GetRequiredService<IWorldController>();
                     var hud = _services.GetRequiredService<HUDController>();
                     var entities = _services.GetRequiredService<EntityController>();
+                    var screensController = _services.GetRequiredService<ScreensController>();
 
                     var frameDelay = 0;
                     var lastReadings = new List<int>();
@@ -122,13 +125,12 @@ namespace Aelgi.Dragh2
                         if (averageFps < lowerFPS) frameDelay--;
                         if (averageFps > upperFPS) frameDelay++;
 
-                        Console.WriteLine($"Frame Delay: {frameDelay}, FPS: {averageFps}");
                         statsService.SetFPS((int)averageFps);
 
                         if (frameDelay > 0) Thread.Sleep(frameDelay);
 
-                        Update(window, statsService, gameUpdateService, keyboard, world, hud, entities);
-                        Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize);
+                        Update(window, statsService, gameUpdateService, keyboard, world, hud, entities, screensController);
+                        Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize, screensController);
                         Glfw.PollEvents();
 
                         if (keyboard.IsPressed(Key.ESCAPE)) break;
@@ -137,14 +139,15 @@ namespace Aelgi.Dragh2
             }
         }
 
-        protected void Update(NativeWindow window, IStatsService statsService, IGameUpdateService gameService, IKeyboardService keyboard, IWorldController world, HUDController hud, EntityController entities)
+        protected void Update(NativeWindow window, IStatsService statsService, IGameUpdateService gameService, IKeyboardService keyboard, IWorldController world, HUDController hud, EntityController entities, ScreensController screens)
         {
             world.Update(gameService);
             hud.Update(gameService);
             entities.Update(gameService);
+            screens.Update(gameService);
         }
 
-        protected void Render(NativeWindow window, SKCanvas canvas, IUtilityService utility, IWorldController world, HUDController hud, EntityController entities, Position windowSize)
+        protected void Render(NativeWindow window, SKCanvas canvas, IUtilityService utility, IWorldController world, HUDController hud, EntityController entities, Position windowSize, ScreensController screens)
         {
             canvas.Clear(utility.ColorToSkia(Colors.Background));
 
@@ -153,6 +156,7 @@ namespace Aelgi.Dragh2
             world.Render(gameService);
             hud.Render(gameService);
             entities.Render(gameService);
+            screens.Render(gameService);
 
             canvas.Flush();
             window.SwapBuffers();

@@ -100,12 +100,12 @@ namespace Aelgi.Dragh2.Services
         public void DrawRect(Position topLeft, Position bottomRight, Colors color, bool overlay = false)
         {
             var convertedColor = UtilityService.ColorToSkia(color);
+            if (overlay) convertedColor = convertedColor.WithAlpha(100);
             var paint = new SKPaint
             {
                 Color = convertedColor,
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                BlendMode = overlay ? SKBlendMode.Difference : SKBlendMode.SrcATop,
             };
 
             var dTopLeft = GameToSkia(topLeft);

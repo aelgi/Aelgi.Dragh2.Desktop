@@ -13,6 +13,8 @@
         RIGHT,
         UP,
         DOWN,
-        ESCAPE
+
+        ESCAPE,
+        INVENTORY,
     }
 }

@@ -6,21 +6,26 @@ namespace Aelgi.Dragh2.Core.Entities
 {
     public class EntityController : IDrawable
     {
-        public Player Player { get; set; }
+        protected Player _player;
 
         public EntityController()
         {
-            Player = new Player();
+            _player = new Player();
+        }
+
+        public Player FindPlayer()
+        {
+            return _player;
         }
 
         public void Update(IGameUpdateService gameService)
         {
-            Player.Update(gameService);
+            _player.Update(gameService);
         }
 
         public void Render(IGameRenderService gameService)
         {
-            Player.Render(gameService);
+            _player.Render(gameService);
         }
     }
 }

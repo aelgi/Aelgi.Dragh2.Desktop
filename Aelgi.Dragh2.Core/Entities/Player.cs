@@ -78,6 +78,8 @@ namespace Aelgi.Dragh2.Core.Entities
 
         private void HandlePlayerHit(IGameUpdateService gameService, Position worldPosition)
         {
+            if (gameService.IsPressed(Key.INVENTORY)) return;
+
             if (gameService.IsPressed(Key.DIG_DOWN))
             {
                 var bottom = worldPosition + new Position(0, 0.1);
