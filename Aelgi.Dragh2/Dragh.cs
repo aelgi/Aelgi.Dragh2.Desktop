@@ -11,12 +11,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using SkiaSharp;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aelgi.Dragh2
 {
@@ -96,9 +99,28 @@ namespace Aelgi.Dragh2
                     var hud = _services.GetRequiredService<HUDController>();
                     var entities = _services.GetRequiredService<EntityController>();
 
+                    var frameDelay = 0;
+                    var lastReadings = new List<int>();
+                    var fpsReadings = new CircularBuffer<double>(10);
+
                     while (!window.IsClosing)
                     {
                         //canvas.ClipRect(new SKRect(0, 0, GameToWindowSize(gameUpdateService.WindowSize.X), GameToWindowSize(gameUpdateService.WindowSize.Y)), SKClipOperation.Intersect, true);
+
+                        _framesTimer.Stop();
+                        double milliseconds = _framesTimer.ElapsedMilliseconds;
+                        _framesTimer.Restart();
+
+                        if (milliseconds <= 30) frameDelay++;
+                        if (milliseconds >= 36) frameDelay--;
+
+                        var fps = 1 / (milliseconds / 1000);
+                        fpsReadings.Add(fps);
+                        var averageFps = fpsReadings.Average();
+                        statsService.SetFPS((int)averageFps);
+
+                        if (frameDelay > 0) Thread.Sleep(frameDelay);
+
                         Update(window, statsService, gameUpdateService, keyboard, world, hud, entities);
                         Render(window, canvas, utility, world, hud, entities, gameUpdateService.WindowSize);
                         Glfw.PollEvents();
@@ -111,13 +133,6 @@ namespace Aelgi.Dragh2
 
         protected void Update(NativeWindow window, IStatsService statsService, IGameUpdateService gameService, IKeyboardService keyboard, IWorldController world, HUDController hud, EntityController entities)
         {
-            _framesTimer.Stop();
-            var ts = _framesTimer.ElapsedMilliseconds;
-            _framesTimer.Restart();
-            var fps = 1000 * ts / 60;
-
-            statsService.SetFPS((int)fps);
-
             world.Update(gameService);
             hud.Update(gameService);
             entities.Update(gameService);
