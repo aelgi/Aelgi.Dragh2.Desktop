@@ -24,15 +24,18 @@ namespace Aelgi.Dragh2.Core.Entities
 
         protected double GetJumpHeight()
         {
-            var x = _jumpPosition / 45;
+            var x = _jumpPosition / 30;
             // y = x^2 - 1
-            return ((x * x) - 1) / 20;
+            return ((x * x) - 1) / 10;
         }
 
         protected string _imageName => "Player";
 
         private void HandlePlayerMove(IGameUpdateService gameService, Position worldPosition)
         {
+            var deepGroundedBlock = gameService.WorldController.GetBlock(worldPosition.Add(0, -0.1));
+            if (deepGroundedBlock != null) gameService.GamePosition.Y = deepGroundedBlock.WorldPosition.Y;
+
             var bottomLeft = worldPosition + new Position(-Width, -0.1);
             var bottomRight = worldPosition + new Position(Width, -0.1);
             var topLeft = worldPosition + new Position(-Width, -1.9);
@@ -45,7 +48,7 @@ namespace Aelgi.Dragh2.Core.Entities
 
             if (!isGrounded)
             {
-                if (_jumpPosition == 0) _jumpPosition = 60;
+                if (_jumpPosition == 0) _jumpPosition = 30;
                 _jumpPosition++;
             }
             else
@@ -65,9 +68,9 @@ namespace Aelgi.Dragh2.Core.Entities
                 _playerDirection = PlayerDirection.RIGHT;
             }
 
-            if (isTop && _jumpPosition < 60)
+            if (isTop && _jumpPosition < 30)
             {
-                _jumpPosition = 60;
+                _jumpPosition = 30;
             }
 
             if (_jumpPosition != 0) gameService.GamePosition.Y += GetJumpHeight();

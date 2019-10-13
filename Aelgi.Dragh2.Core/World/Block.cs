@@ -17,6 +17,8 @@ namespace Aelgi.Dragh2.Core.World
 
         public static int BlockSize => 32;
 
+        public Position WorldPosition => ChunkPosition + Position;
+
         public Block()
         {
             _health = MaxHealth;
