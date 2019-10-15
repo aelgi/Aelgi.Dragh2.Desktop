@@ -1,6 +1,8 @@
 ﻿using Aelgi.Dragh2.Core.IModels;
+using Aelgi.Dragh2.Core.Inv.Items;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
+using System.Collections.Generic;
 
 namespace Aelgi.Dragh2.Core.World
 {
@@ -13,6 +15,8 @@ namespace Aelgi.Dragh2.Core.World
         protected int _health;
         public bool IsAlive => _health > 0;
 
+        protected abstract ICollection<InventoryItem> _dropsOnDeath { get; }
+
         protected Position _positionOnScreen;
 
         public static int BlockSize => 32;
@@ -24,9 +28,12 @@ namespace Aelgi.Dragh2.Core.World
             _health = MaxHealth;
         }
 
-        public void OnHit()
+        public ICollection<InventoryItem> OnHit()
         {
             _health -= 10;
+
+            if (_health <= 0) return _dropsOnDeath;
+            return null;
         }
 
         protected void DrawImage(IGameRenderService gameService, string imageName)

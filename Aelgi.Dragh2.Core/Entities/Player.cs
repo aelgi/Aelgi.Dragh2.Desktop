@@ -1,7 +1,9 @@
 ﻿using Aelgi.Dragh2.Core.Enums;
 using Aelgi.Dragh2.Core.IModels;
+using Aelgi.Dragh2.Core.Inv;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
+using Aelgi.Dragh2.Core.World;
 
 namespace Aelgi.Dragh2.Core.Entities
 {
@@ -19,6 +21,8 @@ namespace Aelgi.Dragh2.Core.Entities
         protected Position _drawPosition = new Position(-0.5, -2);
         protected Position _playerPosition = new Position(0, 0);
         protected double _jumpPosition = 0;
+
+        public Inventory Inventory = new Inventory();
 
         protected PlayerDirection _playerDirection = PlayerDirection.RIGHT;
 
@@ -76,6 +80,14 @@ namespace Aelgi.Dragh2.Core.Entities
             if (_jumpPosition != 0) gameService.GamePosition.Y += GetJumpHeight();
         }
 
+        private void HitBlock(Block block)
+        {
+            if (block == null) return;
+            var newItems = block.OnHit();
+            if (newItems == null) return;
+            foreach (var item in newItems) Inventory.AddItem(item);
+        }
+
         private void HandlePlayerHit(IGameUpdateService gameService, Position worldPosition)
         {
             if (gameService.IsPressed(Key.INVENTORY)) return;
@@ -84,13 +96,13 @@ namespace Aelgi.Dragh2.Core.Entities
             {
                 var bottom = worldPosition + new Position(0, 0.1);
                 var bottomBlock = gameService.WorldController.GetBlock(bottom);
-                if (bottomBlock != null) bottomBlock.OnHit();
+                HitBlock(bottomBlock);
             }
             else if (gameService.IsPressed(Key.DIG_UP))
             {
                 var top = worldPosition + new Position(0, -2.1);
                 var topBlock = gameService.WorldController.GetBlock(top);
-                if (topBlock != null) topBlock.OnHit();
+                HitBlock(topBlock);
             }
             else if (gameService.IsPressed(Key.DIG_LEFT))
             {
@@ -100,8 +112,8 @@ namespace Aelgi.Dragh2.Core.Entities
                 var topBlock = gameService.WorldController.GetBlock(top);
                 var bottomBlock = gameService.WorldController.GetBlock(bottom);
 
-                if (topBlock != null) topBlock.OnHit();
-                else if (bottomBlock != null) bottomBlock.OnHit();
+                if (topBlock != null) HitBlock(topBlock);
+                else if (bottomBlock != null) HitBlock(bottomBlock);
             }
             else if (gameService.IsPressed(Key.DIG_RIGHT))
             {
@@ -111,8 +123,8 @@ namespace Aelgi.Dragh2.Core.Entities
                 var topBlock = gameService.WorldController.GetBlock(top);
                 var bottomBlock = gameService.WorldController.GetBlock(bottom);
 
-                if (topBlock != null) topBlock.OnHit();
-                else if (bottomBlock != null) bottomBlock.OnHit();
+                if (topBlock != null) HitBlock(topBlock);
+                else if (bottomBlock != null) HitBlock(bottomBlock);
             }
         }
 
