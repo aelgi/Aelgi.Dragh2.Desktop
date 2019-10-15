@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\" />
+    <Folder Include="Inventory\Items\" />
     <Folder Include="Screens\" />
   </ItemGroup>
 </Project>
