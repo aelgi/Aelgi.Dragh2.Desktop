@@ -15,6 +15,8 @@ namespace Aelgi.Dragh2.Core.World
         protected int _health;
         public bool IsAlive => _health > 0;
 
+        public virtual bool IsCollidable => true;
+
         protected abstract ICollection<InventoryItem> _dropsOnDeath { get; }
 
         protected Position _positionOnScreen;
@@ -28,7 +30,7 @@ namespace Aelgi.Dragh2.Core.World
             _health = MaxHealth;
         }
 
-        public ICollection<InventoryItem> OnHit()
+        public virtual ICollection<InventoryItem> OnHit(IWorldController worldController)
         {
             _health -= 10;
 
@@ -54,7 +56,7 @@ namespace Aelgi.Dragh2.Core.World
         }
 
         public abstract void Render(IGameRenderService gameService);
-        public void Update(IGameUpdateService gameService)
+        public virtual void Update(IGameUpdateService gameService)
         {
             var realPosition = ChunkPosition + Position;
             _positionOnScreen = realPosition - gameService.GamePosition;

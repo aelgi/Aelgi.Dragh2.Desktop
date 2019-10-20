@@ -61,7 +61,9 @@ namespace Aelgi.Dragh2.Core.World
             var chunkPos = RoundToChunk(pos);
             var chunk = GetChunk(chunkPos);
 
-            return chunk.GetBlock(pos) != null;
+            var block = chunk.GetBlock(pos);
+            if (block != null) return block.IsCollidable;
+            return false;
         }
 
         public Block GetBlock(Position pos)
