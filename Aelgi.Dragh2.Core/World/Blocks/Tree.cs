@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Aelgi.Dragh2.Core.Inv.Items;
+﻿using Aelgi.Dragh2.Core.Inv.Items;
 using Aelgi.Dragh2.Core.IServices;
+using System.Collections.Generic;
 
 namespace Aelgi.Dragh2.Core.World.Blocks
 {
@@ -29,7 +28,7 @@ namespace Aelgi.Dragh2.Core.World.Blocks
 
         public override void Render(IGameRenderService gameService)
         {
-            DrawImage(gameService, "TreeBase");
+            DrawImage(gameService, "Blocks/TreeBase");
         }
     }
 }

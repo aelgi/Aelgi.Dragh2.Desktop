@@ -33,7 +33,7 @@ namespace Aelgi.Dragh2.Core.Entities
             return ((x * x) - 1) / 10;
         }
 
-        protected string _imageName => "Player";
+        protected string _imageName => "Entities/Player";
 
         private void HandlePlayerMove(IGameUpdateService gameService, Position worldPosition)
         {

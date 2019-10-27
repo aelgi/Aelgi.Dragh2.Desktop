@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Aelgi.Dragh2.Core.Inv.Items;
+﻿using Aelgi.Dragh2.Core.Inv.Items;
 using Aelgi.Dragh2.Core.IServices;
-using Aelgi.Dragh2.Core.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Aelgi.Dragh2.Core.World.Blocks
 {
@@ -24,7 +23,7 @@ namespace Aelgi.Dragh2.Core.World.Blocks
                 for (var y = -2; y <= 2; y++)
                 {
                     var b = gameService.WorldController.GetBlock(realPosition.Add(x, y));
-                    if (b!= null)
+                    if (b != null)
                     {
                         // DEbug here
                     }
@@ -42,13 +41,13 @@ namespace Aelgi.Dragh2.Core.World.Blocks
             }
             else
             {
-                _health -= (new Random()).Next(1, 5);
+                _health -= (new Random()).Next(0, 5);
             }
         }
 
         public override void Render(IGameRenderService gameService)
         {
-            DrawImage(gameService, "TreeLeaf");
+            DrawImage(gameService, "Blocks/TreeLeaf");
         }
     }
 }

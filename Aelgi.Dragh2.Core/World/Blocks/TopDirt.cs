@@ -14,7 +14,7 @@ namespace Aelgi.Dragh2.Core.World.Blocks
 
         public override void Render(IGameRenderService gameService)
         {
-            DrawImage(gameService, "TopDirt");
+            DrawImage(gameService, "Blocks/TopDirt");
         }
     }
 }

@@ -4,6 +4,6 @@
     {
         public override string Name => "Dirt";
         public override int MaxStackSize => 12;
-        public override string IconPath => "BaseDirt";
+        public override string IconPath => "Blocks/BaseDirt";
     }
 }
