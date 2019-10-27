@@ -10,5 +10,6 @@ namespace Aelgi.Dragh2.Core.IServices
 
         bool IsGrounded(Position pos);
         Block GetBlock(Position pos);
+        Chunk GetChunk(Position pos);
     }
 }

@@ -5,6 +5,8 @@ namespace Aelgi.Dragh2.Core.World.Generators
 {
     public class MineGenerator : IGenerator
     {
+        public string GeneratorName => "Mine";
+
         public Chunk GenerateChunk(Position gamePosition)
         {
             var chunk = new Chunk(gamePosition);

@@ -20,7 +20,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Aelgi.Dragh2
 {
@@ -218,6 +217,11 @@ namespace Aelgi.Dragh2
                     return Key.ESCAPE;
                 case Keys.E:
                     return Key.INVENTORY;
+
+                case Keys.U:
+                    return Key.INVENTORY_DOWN;
+                case Keys.O:
+                    return Key.INVENTORY_UP;
 
                 default: return Key.NONE;
             }

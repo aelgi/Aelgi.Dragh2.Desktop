@@ -7,6 +7,8 @@ namespace Aelgi.Dragh2.Core.World.Generators
 {
     public class PlainsGenerator : IGenerator
     {
+        public string GeneratorName => "Plains";
+
         public int CapRange(int currentVal, int minVal, int maxVal)
         {
             if (currentVal < minVal) return minVal;
@@ -51,7 +53,7 @@ namespace Aelgi.Dragh2.Core.World.Generators
 
             for (var i = 1; i < (Chunk.ChunkWidth - 1); i++)
             {
-                if (lineHeights[i] == lineHeights[i-1] && lineHeights[i] == lineHeights[i+1])
+                if (lineHeights[i] == lineHeights[i - 1] && lineHeights[i] == lineHeights[i + 1])
                 {
                     if (rnd.Next(1, 4) == 1) continue;
                     // Time to make a tree!

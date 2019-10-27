@@ -16,6 +16,7 @@ namespace Aelgi.Dragh2.Core.World
 
         protected Dictionary<Position, Block> _blocks;
         protected Position _chunkOrigin;
+        public string GeneratorName { get; set; }
 
         public Chunk(Position chunkOrigin)
         {

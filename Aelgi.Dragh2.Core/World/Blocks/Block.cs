@@ -30,9 +30,9 @@ namespace Aelgi.Dragh2.Core.World
             _health = MaxHealth;
         }
 
-        public virtual ICollection<InventoryItem> OnHit(IWorldController worldController)
+        public virtual ICollection<InventoryItem> OnHit(IWorldController worldController, InventoryItem activeItem)
         {
-            _health -= 10;
+            _health -= activeItem.DamageAmount(this);
 
             if (_health <= 0) return _dropsOnDeath;
             return null;

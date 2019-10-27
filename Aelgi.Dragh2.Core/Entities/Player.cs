@@ -23,6 +23,9 @@ namespace Aelgi.Dragh2.Core.Entities
         protected double _jumpPosition = 0;
 
         public Inventory Inventory = new Inventory();
+        protected KeyboardDeBounce _invDown = new KeyboardDeBounce(Key.INVENTORY_DOWN);
+        protected KeyboardDeBounce _invUp = new KeyboardDeBounce(Key.INVENTORY_UP);
+        protected Position _topLeft;
 
         protected PlayerDirection _playerDirection = PlayerDirection.RIGHT;
 
@@ -83,7 +86,7 @@ namespace Aelgi.Dragh2.Core.Entities
         private void HitBlock(Block block, IWorldController worldController)
         {
             if (block == null) return;
-            var newItems = block.OnHit(worldController);
+            var newItems = block.OnHit(worldController, Inventory.GetActiveItem());
             if (newItems == null) return;
             foreach (var item in newItems) Inventory.AddItem(item);
         }
@@ -128,18 +131,30 @@ namespace Aelgi.Dragh2.Core.Entities
             }
         }
 
+        private void HandlePlayerInventory(IGameUpdateService gameService)
+        {
+            _invDown.Update(gameService);
+            _invUp.Update(gameService);
+
+            if (_invUp.WasReleased()) Inventory.NextItem();
+            if (_invDown.WasReleased()) Inventory.PreviousItem();
+        }
+
         public void Update(IGameUpdateService gameService)
         {
             var worldPosition = _playerPosition + gameService.GamePosition;
+            _topLeft = gameService.WindowSize * new Position(-0.5, -0.5);
 
             HandlePlayerMove(gameService, worldPosition);
             HandlePlayerHit(gameService, worldPosition);
+            HandlePlayerInventory(gameService);
         }
 
         public void Render(IGameRenderService gameService)
         {
             var currentPos = _drawPosition + _playerPosition;
             gameService.DrawImage(currentPos, _imageName);
+            Inventory.GetActiveItem()?.Draw(gameService, _topLeft);
         }
     }
 }

@@ -5,6 +5,8 @@ namespace Aelgi.Dragh2.Core.World.Generators
 {
     public class WorldGenerator : IGenerator
     {
+        public string GeneratorName => "World";
+
         protected IGenerator _plainsGenerator = new PlainsGenerator();
         protected IGenerator _minesGenerator = new MineGenerator();
         protected IGenerator _skyGenerator = new SkyGenerator();

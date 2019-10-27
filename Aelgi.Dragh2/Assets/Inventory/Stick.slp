@@ -1,0 +1,45 @@
+{
+    "project": {
+        "currentLayerIndex": 0,
+        "guides": [
+        ],
+        "layers": [
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAvElEQVRYhcXWQQ6DIBBG4UdXPZBH6TE9igdyV1dtWgUGcObHnTHhexEmISF+Xsvz/fueooB12y9rn3GARwTe880tYAR3CxjF121Pt89ADvjsv4WD8xmwws44OExBDbJwCPwDLbg0IIfLAkq4JKCGhwdYONycgtZRCwnwwIcDvPChAE+8O8Ab7wqIwJsDovCmgEjcDIjGqwEKvBigwrMBSvwSoMb/Ambg34BZOECaiUPlQqLAiwEqPBugxAEO0RZ2nq64R+wAAAAASUVORK5CYII=",
+                "name": "Layer 1",
+                "opacity": 1,
+                "visible": true
+            },
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAs0lEQVRYhe2VwQ2AIAxFq/HGDs7gKs7j2XlchRnYwRsJnmoaU0BNqQnyj9D0lf6SAihrnU1YZxOKQqZxYAHF4ZicKyAGHiThy7Z3qcKoYl16DaeJc8nvxLyCY3J6x93TGDELOF0tQbB1/jzvJYEISHlO4QAFOmCd76zzt+Di4gYrN3BiFsTgAAov5woQ/WopxQauweuFc/oHvHn+P7hW29ll9GSfq6i6tjd4Vg3+CRwL0GYe4UeTF5/ZZ+EAAAAASUVORK5CYII=",
+                "name": "Layer 2",
+                "opacity": 1,
+                "visible": true
+            }
+        ],
+        "swatch": {
+            "colours": [
+            ]
+        },
+        "uiState": {
+            "firstPane": {
+                "offsetX": 526,
+                "offsetY": 35,
+                "sceneCentered": false,
+                "size": 1,
+                "zoomLevel": 26
+            },
+            "lastFillToolUsed": "FillTool",
+            "layerListViewContentY": 0,
+            "mainSplitViewState": "gqJlaW5kZXgAbnByZWZlcnJlZFdpZHRo+0CEAAAAAAAAomVpbmRleAFucHJlZmVycmVkV2lkdGj7QG4AAAAAAAA=",
+            "panelSplitViewState": "gaJlaW5kZXgBb3ByZWZlcnJlZEhlaWdodPtAbIAAAAAAAA==",
+            "secondPane": {
+                "offsetX": -16,
+                "offsetY": 445,
+                "sceneCentered": true,
+                "size": 0,
+                "zoomLevel": 1
+            }
+        }
+    }
+}

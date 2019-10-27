@@ -3,7 +3,6 @@ using Aelgi.Dragh2.Core.IModels;
 using Aelgi.Dragh2.Core.Inv;
 using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
-using System.Linq;
 
 namespace Aelgi.Dragh2.Core.Screens
 {
@@ -22,23 +21,19 @@ namespace Aelgi.Dragh2.Core.Screens
         {
             _topLeft = gameService.WindowSize / 2;
             _topLeft *= -1;
-            _topLeft += new Position(1, 1);
+            _topLeft += new Position(0, 2);
             _inventory = _entities.FindPlayer()?.Inventory;
         }
 
         public void Render(IGameRenderService gameService)
         {
-            gameService.DrawRect(_topLeft, _topLeft.Add(10, 10), Enums.Colors.White, true);
-            gameService.DrawToScreen(_topLeft, 20, "Inventory:");
+            gameService.DrawRect(_topLeft, _topLeft.Add(_inventory.MaxInventoryItems, 1), Enums.Colors.White, true);
+            gameService.DrawToScreen(_topLeft.Add(0, -0.2), 20, "Inventory:");
 
             if (_inventory == null) return;
 
-            var topRow = _inventory.GetTopRow().ToList();
-            var x = 0;
-            foreach (var item in topRow)
-            {
-                item.Draw(gameService, _topLeft.Add(x++, 0));
-            }
+            for (var i = -1; i < _inventory.MaxInventoryItems; i++)
+                _inventory.GetItem(i)?.Draw(gameService, _topLeft.Add(i + 1, 0));
         }
     }
 }

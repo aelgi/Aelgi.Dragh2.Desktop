@@ -34,19 +34,24 @@ namespace Aelgi.Dragh2.Core.World
             var positions = new List<Position>();
 
             var dev = 1;
-            var minX = gamePosition.X - (gamePosition.X % Chunk.ChunkWidth) - (Chunk.ChunkWidth * dev);
-            var maxX = gamePosition.X - (gamePosition.X % Chunk.ChunkWidth) + (Chunk.ChunkWidth * dev);
-            var minY = gamePosition.Y - (gamePosition.Y % Chunk.ChunkHeight) - (Chunk.ChunkHeight * dev);
-            var maxY = gamePosition.Y - (gamePosition.Y % Chunk.ChunkHeight) + (Chunk.ChunkHeight * dev);
 
-            for (var i = minX; i <= maxX; i += Chunk.ChunkWidth)
-                for (var j = minY; j <= maxY; j += Chunk.ChunkHeight)
-                    positions.Add(new Position(i, j));
+            var topLeft = gamePosition - new Position(Chunk.ChunkWidth * dev, Chunk.ChunkHeight * dev);
+            var bottomRight = gamePosition + new Position(Chunk.ChunkWidth * dev, Chunk.ChunkHeight * dev);
+
+            var steps = Math.Min(Chunk.ChunkWidth, Chunk.ChunkHeight) / 2;
+
+            for (var i = topLeft.X; i <= bottomRight.X; i += steps)
+                for (var j = topLeft.Y; j <= bottomRight.Y; j += steps)
+                {
+                    var pos = RoundToChunk(new Position(i, j));
+                    if (positions.Contains(pos)) continue;
+                    positions.Add(pos);
+                }
 
             return positions;
         }
 
-        protected Chunk GetChunk(Position pos)
+        protected Chunk GetChunkExact(Position pos)
         {
             if (!_loadedChunks.ContainsKey(pos))
             {
@@ -59,16 +64,21 @@ namespace Aelgi.Dragh2.Core.World
         public bool IsGrounded(Position pos)
         {
             var chunkPos = RoundToChunk(pos);
-            var chunk = GetChunk(chunkPos);
+            var chunk = GetChunkExact(chunkPos);
 
             var block = chunk.GetBlock(pos);
             if (block != null) return block.IsCollidable;
             return false;
         }
 
+        public Chunk GetChunk(Position pos)
+        {
+            return GetChunkExact(RoundToChunk(pos));
+        }
+
         public Block GetBlock(Position pos)
         {
-            var chunk = GetChunk(RoundToChunk(pos));
+            var chunk = GetChunkExact(RoundToChunk(pos));
             return chunk.GetBlock(pos);
         }
 
@@ -77,7 +87,7 @@ namespace Aelgi.Dragh2.Core.World
         public void Update(IGameUpdateService gameService)
         {
             var positions = GetChunksPositionsOnScreen(gameService.GamePosition);
-            _selectedChunks = positions.Select(x => GetChunk(x)).ToList();
+            _selectedChunks = positions.Select(x => GetChunkExact(x)).ToList();
 
             foreach (var chunk in _selectedChunks) chunk.Update(gameService);
         }

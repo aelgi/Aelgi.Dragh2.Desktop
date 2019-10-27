@@ -43,6 +43,7 @@ namespace Aelgi.Dragh2.Core.Models
         public static bool operator <=(Position a, Position b) => a.X <= b.X && a.Y <= b.Y;
         public static Position operator /(Position pos, double scalar) => new Position(pos.X / scalar, pos.Y / scalar);
         public static Position operator *(Position pos, double scalar) => new Position(pos.X * scalar, pos.Y * scalar);
+        public static Position operator *(Position a, Position b) => new Position(a.X * b.X, a.Y * b.Y);
 
         public bool Equals(Position other)
         {

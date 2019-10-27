@@ -16,5 +16,8 @@
 
         ESCAPE,
         INVENTORY,
+
+        INVENTORY_DOWN,
+        INVENTORY_UP,
     }
 }

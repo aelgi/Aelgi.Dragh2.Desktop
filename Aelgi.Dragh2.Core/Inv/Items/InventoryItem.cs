@@ -1,5 +1,6 @@
 ﻿using Aelgi.Dragh2.Core.IServices;
 using Aelgi.Dragh2.Core.Models;
+using Aelgi.Dragh2.Core.World;
 
 namespace Aelgi.Dragh2.Core.Inv.Items
 {
@@ -38,6 +39,11 @@ namespace Aelgi.Dragh2.Core.Inv.Items
         }
 
         public int Count => _stackSize;
+
+        public virtual int DamageAmount(Block block)
+        {
+            return 0;
+        }
 
         public void Draw(IGameRenderService gameService, Position pos)
         {

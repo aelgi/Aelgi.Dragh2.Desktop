@@ -3,7 +3,8 @@
     public class DirtItem : InventoryItem
     {
         public override string Name => "Dirt";
-        public override int MaxStackSize => 12;
         public override string IconPath => "Blocks/BaseDirt";
+
+        public override int MaxStackSize => 12;
     }
 }
