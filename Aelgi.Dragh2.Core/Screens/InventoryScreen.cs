@@ -1,4 +1,5 @@
-﻿using Aelgi.Dragh2.Core.Entities;
+﻿using Aelgi.Dragh2.Core.Crafting;
+using Aelgi.Dragh2.Core.Entities;
 using Aelgi.Dragh2.Core.IModels;
 using Aelgi.Dragh2.Core.Inv;
 using Aelgi.Dragh2.Core.IServices;
@@ -11,10 +12,13 @@ namespace Aelgi.Dragh2.Core.Screens
         protected EntityController _entities;
         protected Position _topLeft;
         protected Inventory _inventory;
+        protected RecipeManager _recipeManager;
 
         public InventoryScreen(EntityController entities)
         {
             _entities = entities;
+            _recipeManager = new RecipeManager();
+            _recipeManager.GetAllRecipes();
         }
 
         public void Update(IGameUpdateService gameService)

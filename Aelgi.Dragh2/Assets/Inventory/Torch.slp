@@ -1,0 +1,63 @@
+{
+    "project": {
+        "currentLayerIndex": 0,
+        "guides": [
+        ],
+        "layers": [
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAeElEQVRYhe2UsQ3AIAwEnSiswCjsX2eUrJCCVDQRwn7Fdpq/EgnusBAihBBCCCGOtFp6q6UjezYv8XvtvG7T2Z8DVje2RBwRYgR4AhaxdfxwgCZHxFCA963NAZFiNSBDPg3IEk8DsuUiwD/gLR7sf8pFlDcQKSaDB7nkMWUItf9TAAAAAElFTkSuQmCC",
+                "name": "Layer 1",
+                "opacity": 1,
+                "visible": true
+            },
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAgklEQVRYhWNgGAWjYBSMglEwCkbBKKAiaDLj/d9kxvufFD2M1LIYXazu1GeqmE2W5eSEBFkWY7NEjof5vxwPM+0cgMtgmMVyPMy09Tk+y8nRS1RCgfkaPWEhW/roy1/qJzp88Uit4CbZ1cPC18iAKB/Q3NeELKdl1sLpm2Ht61GADAASFz0Gs5mfCAAAAABJRU5ErkJggg==",
+                "name": "Layer 2",
+                "opacity": 1,
+                "visible": true
+            },
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAeUlEQVRYhWNgGAWjYLiDe8fF/+OTZ6KXQ3ABRloYis3XSpYvsdrFQmuLCQGqhQAxlmMLBao4gBSfozuC7okQ3bEDkguQHUEVB+BK4cQAqoUAuY6gejlAam6gW0GEzXKaOQCXI2hWDhDjCEoS6igYBaNgFIyCUUBTAAAd9SmM2e4ZRwAAAABJRU5ErkJggg==",
+                "name": "Layer 3",
+                "opacity": 1,
+                "visible": true
+            },
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAbElEQVRYhe3Tyw2AIBBF0dEm2FsTZVoTe6vA/QRwNG9W3rMkJFx+ZgCQpNXSWy39ad6WtbgfO85ruJY8YLXrUYQ0IHLkPmJXBkT4SGnA7J5X5CfwNiLlF5jN34MPTAsYRXy5IklE5HcAAPBfN6wtIuTBlzDrAAAAAElFTkSuQmCC",
+                "name": "Layer 4",
+                "opacity": 1,
+                "visible": true
+            },
+            {
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAASUlEQVRYhe3SsQ0AIAgAQZyC3v1nsmcKXQDQBhr/ahNeRQQAUGip7tuZ0TF8moVzSgKim3shLS+QRZQFeBHZV5RGvCwjAAD41wGI5RYmQk8ZvAAAAABJRU5ErkJggg==",
+                "name": "Layer 5",
+                "opacity": 1,
+                "visible": true
+            }
+        ],
+        "swatch": {
+            "colours": [
+            ]
+        },
+        "uiState": {
+            "firstPane": {
+                "offsetX": 587,
+                "offsetY": 61,
+                "sceneCentered": false,
+                "size": 1,
+                "zoomLevel": 25
+            },
+            "lastFillToolUsed": "FillTool",
+            "layerListViewContentY": 0,
+            "mainSplitViewState": "gqJlaW5kZXgAbnByZWZlcnJlZFdpZHRo+0CEAAAAAAAAomVpbmRleAFucHJlZmVycmVkV2lkdGj7QG4AAAAAAAA=",
+            "panelSplitViewState": "gaJlaW5kZXgBb3ByZWZlcnJlZEhlaWdodPtAbIAAAAAAAA==",
+            "secondPane": {
+                "offsetX": -16,
+                "offsetY": 445,
+                "sceneCentered": true,
+                "size": 0,
+                "zoomLevel": 1
+            }
+        }
+    }
+}

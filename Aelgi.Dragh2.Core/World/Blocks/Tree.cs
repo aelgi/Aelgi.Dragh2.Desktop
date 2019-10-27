@@ -9,8 +9,8 @@ namespace Aelgi.Dragh2.Core.World.Blocks
         public override int MaxHealth => 500;
         protected override ICollection<InventoryItem> _dropsOnDeath => new List<InventoryItem>()
         {
-            new Stick(),
-            new Stick(),
+            new StickItem(),
+            new StickItem(),
         };
         public override bool IsCollidable => false;
 

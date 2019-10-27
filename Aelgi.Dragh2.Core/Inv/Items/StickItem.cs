@@ -2,7 +2,7 @@
 
 namespace Aelgi.Dragh2.Core.Inv.Items
 {
-    public class Stick : InventoryItem
+    public class StickItem : InventoryItem
     {
         public override string Name => "Stick";
         public override string IconPath => "Inventory/Stick";
